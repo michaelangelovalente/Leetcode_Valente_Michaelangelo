@@ -106,7 +106,7 @@ struct HashSet *makeHashSet(int maxSize ){
 }
 
 int getkey( struct HashSet *h_set, int val ){
-    return val % h_set->max;
+    return abs( val % h_set->max );
 }
 
 void insert( struct HashSet *h_set, int key ){
@@ -156,18 +156,19 @@ struct Node *search( struct HashSet *h_set, int key ){
     return NULL;
 }
 bool containsDuplicate(int* nums, int numsSize){
-    struct HashSet **h_set = calloc(1 ,sizeof( struct HashSet *));
-    *h_set = makeHashSet( numsSize +1 );
-    for( int i = 0 ; i < (*h_set)->max; i++ ){
+/*    struct HashSet **h_set = calloc(1 ,sizeof( struct HashSet *));*/
+    struct HashSet *h_set = makeHashSet( numsSize +1 );
+    for( int i = 0 ; i < numsSize; i++ ){
 
-        struct Node *tmp = search( *h_set, nums[i] );
+        struct Node *tmp = search( h_set, nums[i] );
         if( tmp == NULL  ){
-            insert( *h_set, nums[i] );
+            insert( h_set, nums[i] );
         }else{
-            return false;
+            return true;
         }
     }
-    return true;
+    /*printHashSet( h_set );*/
+    return false;
 }
 
 
@@ -188,19 +189,25 @@ int main(){
     
     /*printHashSet( hash_set );*/
     /*[1,2,3,1]*/
-    int arr[] = {1, 2, 3, 1};
-    int size = 4;
+    /*[1,2,3,4]*/
+    /*[1,5,-2,-4,0]
+*/
+    int arr[] = {1, 5, -2, -4, 0};
+    int size = sizeof(arr) / sizeof( arr[0]);
     struct HashSet *hash_set = makeHashSet( size );
 
-    if( !containsDuplicate( arr, size )){
+    if( containsDuplicate( arr, size )){
         printf("There was a duplicate\n");
     }else{
         printf("There wasn't a duplicate\n");
     }
+    
+    
+
 
     
     
-    printHashSet( hash_set );
+    
 
     int find = 2;
     /*struct Node *found = search( hash_set, find );
