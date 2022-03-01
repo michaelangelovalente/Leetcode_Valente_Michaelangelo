@@ -29,12 +29,12 @@ struct Node{
 };
 
 /*creates an empty binary tree and return the pointer to its root. This will be used to create a BST*/
-struct Node **makeTree( ){
+struct Node **makeTree(){
     struct Node **root = calloc( 1, sizeof( struct Node* ));
     return root;
 }
 
-struct Node *insert( struct Node **root, int key ){
+struct Node *insertTree( struct Node **root, int key ){
     if( !(*root) ){
         struct Node *new_node = calloc( 1, sizeof( struct Node ));
         new_node->key = key;
@@ -42,9 +42,9 @@ struct Node *insert( struct Node **root, int key ){
     }
     
     if( key < (*root)->key ){
-        (*root)->left = insert( &( (*root)->left ) , key  );
+        (*root)->left = insertTree( &( (*root)->left ) , key  );
     }else{
-        (*root)->right = insert( &( (*root)->right ), key );
+        (*root)->right = insertTree( &( (*root)->right ), key );
     }
     
     return (*root);
@@ -75,6 +75,10 @@ void printLevel( int i ){
     printf("->");
 }
 void printTree( struct Node **root ){
+    if(root==NULL){
+        printf("[Empty]");
+        return;
+    }
     if( (*root)){
         printf("|%d|" , (*root)->key);
         printTree( &((*root)->left));
@@ -86,26 +90,47 @@ void printTree( struct Node **root ){
 /* HashSet /w search() and insert() implmentation*/
 
 #define MaxSize 7
+typedef struct Node **Root;
 struct HashSet{
-    struct Node **root;
+    Root *root;
     int max;
     int currItems;
 };
 
 
 
-struct HashSet *makeHashSet( int maxSize ){
+struct HashSet *makeHashSet( ){
     struct HashSet *new_h = calloc( 1, sizeof( struct HashSet ));
     new_h->max = MaxSize;
-    new_h->root = ( new_h->max, sizeof( struct Node *));
+    new_h->root = calloc( new_h->max, sizeof( Root ));
     return new_h;
 }
 
 int getkey( struct HashSet *h_set, int val ){
     return val % h_set->max;
 }
+
 void insert( struct HashSet *h_set, int key ){
-    /*h_set->currItems + getkey(h_set, key) ;
+    /*(*h_set).root + getkey(h_set, key);*/
+    int idx = getkey(h_set, key);
+    if( h_set->root[idx] == NULL ){
+        /*No root for tree -> no tree*/
+        h_set->root[idx] = makeTree();
+    }
+    *h_set->root[idx] = insertTree( h_set->root[idx], key );
+    
+    return;
+}
+
+void printHashSet( struct HashSet *h_set ){
+    for( int i = 0 ; i < h_set->max; i++){
+        printf("-------------------------------------\n");
+        printf("bucket num.:[%d]\n", i);
+        printTree( h_set->root[i] );
+        printf("\n");
+        printf("-------------------------------------\n\n");
+    }
+    
     return;
 }
 
@@ -120,14 +145,29 @@ bool containsDuplicate(int* nums, int numsSize){
 
 /**/
 int main(){
-    struct Node **treeRoot = makeTree();
-    *treeRoot = insert( treeRoot, 100);
+    /*struct Node **treeRoot = makeTree();
+    *treeRoot = insertTree( treeRoot, 100);*/
     /*printTree( treeRoot, 0);*/
-    *treeRoot = insert( treeRoot,  150);
-    *treeRoot = insert( treeRoot, 20);
-    *treeRoot = insert( treeRoot, 15);
-    *treeRoot = insert( treeRoot, 25);
+    /**treeRoot = insertTree( treeRoot,  150);
+    *treeRoot = insertTree( treeRoot, 20);
+    *treeRoot = insertTree( treeRoot, 15);
+    *treeRoot = insertTree( treeRoot, 25);
     printTree( treeRoot);
-    printf("\n");
+    printf("\n");*/
+
+    struct HashSet *hash_set = makeHashSet( );
+    /*printHashSet( hash_set );*/
+    
+    printf("Testing insert: \n");
+    insert( hash_set, 2 );
+    insert( hash_set, 9 );
+    insert( hash_set, 16 );
+
+
+    insert( hash_set, 7 );
+    insert( hash_set, 14 );
+    insert( hash_set, 21 );
+    printHashSet( hash_set );
+
 
 }
