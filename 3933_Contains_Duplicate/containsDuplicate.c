@@ -89,19 +89,18 @@ void printTree( struct Node **root ){
 
 /* HashSet /w search() and insert() implmentation*/
 
-#define MaxSize 7
+/*#define MaxSize 2069*/
 typedef struct Node **Root;
 struct HashSet{
     Root *root;
     int max;
-    int currItems;
 };
 
 
 
-struct HashSet *makeHashSet( ){
+struct HashSet *makeHashSet(int maxSize ){
     struct HashSet *new_h = calloc( 1, sizeof( struct HashSet ));
-    new_h->max = MaxSize;
+    new_h->max = maxSize;
     new_h->root = calloc( new_h->max, sizeof( Root ));
     return new_h;
 }
@@ -157,7 +156,17 @@ struct Node *search( struct HashSet *h_set, int key ){
     return NULL;
 }
 bool containsDuplicate(int* nums, int numsSize){
+    struct HashSet **h_set = calloc(1 ,sizeof( struct HashSet *));
+    *h_set = makeHashSet( numsSize +1 );
+    for( int i = 0 ; i < (*h_set)->max; i++ ){
 
+        struct Node *tmp = search( *h_set, nums[i] );
+        if( tmp == NULL  ){
+            insert( *h_set, nums[i] );
+        }else{
+            return false;
+        }
+    }
     return true;
 }
 
@@ -176,26 +185,31 @@ int main(){
     printTree( treeRoot);
     printf("\n");*/
 
-    struct HashSet *hash_set = makeHashSet( );
-    /*printHashSet( hash_set );*/
     
-    printf("Testing insert: \n");
-    insert( hash_set, 2 );
-    insert( hash_set, 9 );
-    insert( hash_set, 16 );
+    /*printHashSet( hash_set );*/
+    /*[1,2,3,1]*/
+    int arr[] = {1, 2, 3, 1};
+    int size = 4;
+    struct HashSet *hash_set = makeHashSet( size );
 
+    if( !containsDuplicate( arr, size )){
+        printf("There was a duplicate\n");
+    }else{
+        printf("There wasn't a duplicate\n");
+    }
 
-    insert( hash_set, 7 );
-    insert( hash_set, 14 );
-    insert( hash_set, 21 );
+    
+    
     printHashSet( hash_set );
 
     int find = 2;
-    struct Node *found = search( hash_set, find );
+    /*struct Node *found = search( hash_set, find );
     if( found ){
         printf("key %d was found!\n", found->key );
     }else{
         printf("%d key was not present\n", find);
-    }
+    }*/
+
+
 
 }
