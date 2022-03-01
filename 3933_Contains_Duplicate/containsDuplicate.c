@@ -134,7 +134,28 @@ void printHashSet( struct HashSet *h_set ){
     return;
 }
 
-/**/
+
+/* search() returns ptr to node that contains key else null*/
+struct Node *search( struct HashSet *h_set, int key ){
+    int idx = getkey( h_set, key);
+    if( h_set->root[idx] == NULL ){
+        return NULL;
+    }
+    struct Node *tmp = *(h_set->root[idx]);/*points at root*/
+    while( tmp ){
+        if( tmp->key == key ){
+            return tmp;
+        }else if( key < tmp->key ){
+            /* key is at left */
+            tmp = tmp->left;
+        }else{
+            /* key is at right */
+            tmp = tmp->right;
+        }
+    }
+
+    return NULL;
+}
 bool containsDuplicate(int* nums, int numsSize){
 
     return true;
@@ -169,5 +190,12 @@ int main(){
     insert( hash_set, 21 );
     printHashSet( hash_set );
 
+    int find = 2;
+    struct Node *found = search( hash_set, find );
+    if( found ){
+        printf("key %d was found!\n", found->key );
+    }else{
+        printf("%d key was not present\n", find);
+    }
 
 }
