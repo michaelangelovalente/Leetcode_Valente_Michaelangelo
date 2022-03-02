@@ -89,25 +89,24 @@ void printTree( struct Node **root ){
 
 /* HashSet /w search() and insert() implmentation*/
 
-#define MaxSize 7
+/*#define MaxSize 2069*/
 typedef struct Node **Root;
 struct HashSet{
     Root *root;
     int max;
-    int currItems;
 };
 
 
 
-struct HashSet *makeHashSet( ){
+struct HashSet *makeHashSet(int maxSize ){
     struct HashSet *new_h = calloc( 1, sizeof( struct HashSet ));
-    new_h->max = MaxSize;
+    new_h->max = maxSize;
     new_h->root = calloc( new_h->max, sizeof( Root ));
     return new_h;
 }
 
 int getkey( struct HashSet *h_set, int val ){
-    return val % h_set->max;
+    return abs( val % h_set->max );
 }
 
 void insert( struct HashSet *h_set, int key ){
@@ -134,10 +133,42 @@ void printHashSet( struct HashSet *h_set ){
     return;
 }
 
-/**/
-bool containsDuplicate(int* nums, int numsSize){
 
-    return true;
+/* search() returns ptr to node that contains key else null*/
+struct Node *search( struct HashSet *h_set, int key ){
+    int idx = getkey( h_set, key);
+    if( h_set->root[idx] == NULL ){
+        return NULL;
+    }
+    struct Node *tmp = *(h_set->root[idx]);/*points at root*/
+    while( tmp ){
+        if( tmp->key == key ){
+            return tmp;
+        }else if( key < tmp->key ){
+            /* key is at left */
+            tmp = tmp->left;
+        }else{
+            /* key is at right */
+            tmp = tmp->right;
+        }
+    }
+
+    return NULL;
+}
+bool containsDuplicate(int* nums, int numsSize){
+/*    struct HashSet **h_set = calloc(1 ,sizeof( struct HashSet *));*/
+    struct HashSet *h_set = makeHashSet( numsSize +1 );
+    for( int i = 0 ; i < numsSize; i++ ){
+
+        struct Node *tmp = search( h_set, nums[i] );
+        if( tmp == NULL  ){
+            insert( h_set, nums[i] );
+        }else{
+            return true;
+        }
+    }
+    /*printHashSet( h_set );*/
+    return false;
 }
 
 
@@ -155,19 +186,37 @@ int main(){
     printTree( treeRoot);
     printf("\n");*/
 
-    struct HashSet *hash_set = makeHashSet( );
-    /*printHashSet( hash_set );*/
     
-    printf("Testing insert: \n");
-    insert( hash_set, 2 );
-    insert( hash_set, 9 );
-    insert( hash_set, 16 );
+    /*printHashSet( hash_set );*/
+    /*[1,2,3,1]*/
+    /*[1,2,3,4]*/
+    /*[1,5,-2,-4,0]
+*/
+    int arr[] = {1, 5, -2, -4, 0};
+    int size = sizeof(arr) / sizeof( arr[0]);
+    struct HashSet *hash_set = makeHashSet( size );
+
+    if( containsDuplicate( arr, size )){
+        printf("There was a duplicate\n");
+    }else{
+        printf("There wasn't a duplicate\n");
+    }
+    
+    
 
 
-    insert( hash_set, 7 );
-    insert( hash_set, 14 );
-    insert( hash_set, 21 );
-    printHashSet( hash_set );
+    
+    
+    
+
+    int find = 2;
+    /*struct Node *found = search( hash_set, find );
+    if( found ){
+        printf("key %d was found!\n", found->key );
+    }else{
+        printf("%d key was not present\n", find);
+    }*/
+
 
 
 }
