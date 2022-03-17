@@ -3,6 +3,7 @@
 
 In progress...
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) *Note: Need to finish 110. **Balanced Binary Tree** first*
+- [ ] 110. Balanced Binary Tree ( DS used: AVL ) **&#129144;**
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
