@@ -1,7 +1,7 @@
 # LEETCODE Practice
 ## Data Structures and Algorithms in C, OOP practice in Java, and SQL
 
-In progress...
+### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) *Note: Need to finish 110. **Balanced Binary Tree** first*
 - [ ] 110. Balanced Binary Tree ( DS used: AVL ) **&#129144;**
 - [ ] 797. All paths from source to target ( )
@@ -10,6 +10,7 @@ In progress...
 - [ ] 1168. Optimize water distribution in a village
 - [ ] 1202. smallest string with swaps
 ----
+### Done
 - [x] 136. Single Number ( used XOR boolean l. ) 
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
