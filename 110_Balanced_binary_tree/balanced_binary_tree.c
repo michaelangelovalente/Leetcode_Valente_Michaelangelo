@@ -31,7 +31,7 @@ struct node *insertNodeTree( struct node *root, int key ){
     }
     return root;
 }
-
+/*
 void printTree( struct node *root ){
    if( root == NULL ) {
        printf("[NULL](h:-1) |");
@@ -41,13 +41,30 @@ void printTree( struct node *root ){
     printf("[%d](h:%d) |",root->key, root->height);
     printTree( root->right);
     return;
+}*/
+
+/*Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
+void printTree( struct node *root , int dist){
+    if( root == NULL ){
+         printf("[NULL](h:-1) |");
+         return;
+    }
+    dist += 5;
+    print_util( root->right, dist);
+
+    //distance between nodes
+    printf("\n");
+    for( int i = 0; i < dist; i++)
+        printf(" ");
+    printf( "[%d](h:%d)", root->key, root->height );
+
+
 }
-
-
 /*returns the new root*/
  struct node *rightRotation( struct node **node ){
     struct node *tmp =  (*node)->left;
     (*node)->left = tmp->right;
+    tmp->right = *node;
     return tmp;
 }
 
@@ -60,8 +77,13 @@ int main( int argc, char *argv[]){
     insertNodeTree( *rootTree, 1);
 
     insertNodeTree( *rootTree, 3);
+    printf("Root: %d\n", root->key );
     printTree( *rootTree );
     printf("\n");
 
-    *rootTree = right
+    root = rightRotation( rootTree );
+    *rootTree = root;
+    printf("Root: %d\n", root->key );
+    printTree( *rootTree );
+    printf("\n");
 }
