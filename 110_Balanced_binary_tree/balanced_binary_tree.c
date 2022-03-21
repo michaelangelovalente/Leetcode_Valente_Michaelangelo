@@ -44,27 +44,43 @@ void printTree( struct node *root ){
 }*/
 
 /*Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
-void printTree( struct node *root , int dist){
+void printTree_util( struct node *root , int dist){
     if( root == NULL ){
+        dist += 7;
+        for( int i = 0; i < dist; i++)
+            printf(" ");
          printf("[NULL](h:-1) |");
          return;
     }
     dist += 5;
-    print_util( root->right, dist);
+    printTree_util( root->right, dist);
 
     //distance between nodes
     printf("\n");
     for( int i = 0; i < dist; i++)
         printf(" ");
-    printf( "[%d](h:%d)", root->key, root->height );
+    printf( "[%d](h:%d)\n", root->key, root->height );
+    printTree_util( root->left, dist);
 
 
 }
-/*returns the new root*/
+
+void printTree( struct node *root){
+    printTree_util( root, 0);
+}
+/*Applies right rotation operation to a tree and returns the new root*/
  struct node *rightRotation( struct node **node ){
     struct node *tmp =  (*node)->left;
     (*node)->left = tmp->right;
     tmp->right = *node;
+    return tmp;
+}
+
+/*Applies left rotation operation to a tree and returns the new root*/
+struct node *leftRotation( struct node **node){
+    struct node *tmp = (*node)->right;
+    (*node)->right = tmp->left;
+    tmp->left = *node;
     return tmp;
 }
 
@@ -79,11 +95,17 @@ int main( int argc, char *argv[]){
     insertNodeTree( *rootTree, 3);
     printf("Root: %d\n", root->key );
     printTree( *rootTree );
-    printf("\n");
+    printf("\n\n");
 
     root = rightRotation( rootTree );
     *rootTree = root;
     printf("Root: %d\n", root->key );
     printTree( *rootTree );
-    printf("\n");
+    printf("\n\n");
+
+    root = leftRotation( rootTree );
+    *rootTree = root;
+    printf("Root: %d\n", root->key );
+    printTree( *rootTree );
+    printf("\n\n");
 }
