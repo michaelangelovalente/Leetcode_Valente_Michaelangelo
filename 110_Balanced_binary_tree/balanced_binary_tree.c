@@ -23,7 +23,7 @@ void printTree( struct node *root);
 int max( struct node *l, struct node *r);
 
 struct node *find( struct node *root, int find );
-int balanceFactor( struct node **node );
+int balanceFactor( struct node *node );
 /*--------------------------------------------------*/
 
 struct node *find( struct node *root, int find ){
@@ -40,13 +40,17 @@ struct node *find( struct node *root, int find ){
 }
 
 int max( struct node *l, struct node *r){
+
     int l_h = - 1, r_h = -1;
+
     if( l ){
         l_h = l->height;
     }
+
     if( r ){
         r_h = r->height;
     }
+
     return l_h > r_h ? l_h : r_h;
 }
 
@@ -67,7 +71,6 @@ struct node *insertNodeTree( struct node *root, int key ){
         struct node *tmp = newNode(key);
         return tmp ;
     }
-    
        
     if( key < root->key ){
         root->left = insertNodeTree( root->left, key);
@@ -85,31 +88,51 @@ struct node *rightRotation( struct node **node ){
     struct node *tmp =  (*node)->left; tmp->height++; (*node)->height--;
     (*node)->left = tmp->right;
     tmp->right = *node;
+
+    (*node)->height = max( (*node)->left, (*node)->right ) + 1;
+    tmp->height = max( tmp->left, tmp->right) + 1;
+
     return tmp;
 }
 
 /*Applies left rotation operation to a tree and returns the new root*/
 struct node *leftRotation( struct node **node){
-    struct node *tmp = (*node)->right; tmp->height++; (*node)->height--;
+    struct node *tmp = (*node)->right; 
     (*node)->right = tmp->left;
     tmp->left = *node;
+    (*node)->height = max( (*node)->left, (*node)->right ) + 1;
+    tmp->height = max( tmp->left, tmp->right) + 1;
+    
     return tmp;
 }
 
 /* 2 --> left unbalnaced; -2 --> right unbalanceed */
-int balanceFactor( struct node **node ){
+int balanceFactor( struct node *node ){
     int l_h = -1 , r_h = -1;
-    if( (*node)->left ){
-        l_h = (*node)->left->height;
+    if( node->left ){
+        l_h = node->left->height;
     }
-    if( (*node)->right ){
-        r_h = (*node)->right->height;
+    if( node->right ){
+        r_h = node->right->height;
     }
     return l_h - r_h;
 }
 
+/*
+void rebalance( struct node *node ){
+    struct node *tmp = *node;
+    int bf = balanceFactor( &node );
+    /*Case Left unblanced tree*/
+
+
+    /*Case Right unbalanced tree*/
+
+    /*
+}
+*/
 
 /*--------------------Utilities---------------------------------------------------*/
+
 
 /*Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
 void printTree_util( struct node *root , int dist){
@@ -149,18 +172,27 @@ int main( int argc, char *argv[]){
     }
     printf("Root of tree is: %d and height is: %d\n", root->key,  root->height);
     printTree( root );
-    printf("Balance Factor: %d", balanceFactor( &root ));
+    printf("Balance Factor: %d", balanceFactor( root ));
     printf("\n\n");
 
     
-    struct node *x = find( root , 25 );
+    struct node *x = find( root , 1 );
     printf( "Left rotate on %d.\n" , x->key );
     
     x = leftRotation( &x );
     printTree( x );
     printf( "\nRoot is: %d.\n", x->key );
-    printf("Balance Factor: %d", balanceFactor( &x ));
+    printf("Balance Factor: %d\n\n", balanceFactor( x ));
+
+
+    printf( "Right rotate on %d.\n" , x->key );
     
+    x = rightRotation( &x );
+    printTree( x );
+    printf( "\nRoot is: %d.\n", x->key );
+    printf("Balance Factor: %d", balanceFactor( x ));
+    
+
     /*
     struct node *x = find( root , 20 );
     printf( "Right rotate on %d.\n" , x->key );
