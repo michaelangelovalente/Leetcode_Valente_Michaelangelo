@@ -106,7 +106,6 @@ struct node *leftRotation( struct node **node){
     return tmp;
 }
 
-/* 2 --> left unbalnaced; -2 --> right unbalanceed */
 int balanceFactor( struct node *node ){
     int l_h = -1 , r_h = -1;
     if( node->left ){
@@ -118,18 +117,61 @@ int balanceFactor( struct node *node ){
     return l_h - r_h;
 }
 
-/*
-void rebalance( struct node *node ){
+
+
+void rebalance( struct node **node ){
     struct node *tmp = *node;
-    int bf = balanceFactor( &node );
+    int bf = balanceFactor( tmp );
+    /*bf == 2 --> left unbalnaced; 
+    bf == -2 --> right unbalanced */
+
+
+    
+    /*Case Right unbalanced tree*/
+    if( bf == -2 ){
+        
+        /* bf(y) == 1 : Right unbalanced -> left sub tree*/
+        /**
+         * @brief 
+         *  [x]
+         *     \
+         *      [y]
+         *     /
+         * [...]
+         * rightRotation(y)
+         *  [x]
+         *     \
+         *      [y]
+         *         \
+         *          [ ... ]
+         */
+        if( bf == -1 ){
+            tmp->right = rightRotation( &(tmp->right) );
+        }
+        
+        /* bf(y) == -1 : Right unbalanced -> right sub tree*/
+        /**
+         * @brief 
+         *  [x]
+         *     \
+         *      [y]
+         *         \
+         *          [ ... ]
+         * leftRotation(x)
+         *      [y]
+         *     /   \
+         *  [x]     [...]
+         */
+        tmp = leftRotation( &tmp );
+        
+    }
+
     /*Case Left unblanced tree*/
 
-
-    /*Case Right unbalanced tree*/
-
-    /*
+    *node = tmp;
+    return;
 }
-*/
+
 
 /*--------------------Utilities---------------------------------------------------*/
 
@@ -137,20 +179,20 @@ void rebalance( struct node *node ){
 /*Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
 void printTree_util( struct node *root , int dist){
     if( root == NULL ){
-        dist += 4;
+        dist += 7;
         for( int i = 0; i < dist; i++)
             printf(" ");
          printf("[NULL](h:-1)");
          return;
     }
-    dist += 5;
+    dist += 8;
     printTree_util( root->right, dist);
 
     //distance between nodes
     printf("\n");
     for( int i = 0; i < dist; i++)
         printf(" ");
-    printf( "[%d](h:%d)\n", root->key, root->height );
+    printf( "[%d](h:%d)(balF.[%d])\n", root->key, root->height, balanceFactor( root ) );
     printTree_util( root->left, dist);
 
 }
@@ -162,9 +204,9 @@ void printTree( struct node *root){
 
 
 int main( int argc, char *argv[]){
-    /*struct node **rootTree = calloc(1 , sizeof( struct node *));*/
-    struct node *root = newNode(1); /*newNode( 25 );*/
-    int tmp[] = { 2, 3 };/*{20, 36, 10, 22, 12, 30, 40, 28, 38, 48 };*/
+   
+    struct node *root = newNode( 1 );
+    int tmp[] = {2, 3  };
     int size = sizeof(tmp)/sizeof(tmp[0]);
     /*insertNodeTree( root, 25);*/
     for( int i = 0; i < size; i++ ){
@@ -175,53 +217,42 @@ int main( int argc, char *argv[]){
     printf("Balance Factor: %d", balanceFactor( root ));
     printf("\n\n");
 
+    printf("Rebalancing: %d\n", root->key);
+    rebalance( &root );
+    printTree( root );
+    printf("Balance Factor: %d", balanceFactor( root ));
+    printf("\n\n");
+   
+   /* struct node *root = newNode( 25 );
+    int tmp[] = {20, 36, 10, 22, 12, 30, 40, 28, 38, 48 };
+    int size = sizeof(tmp)/sizeof(tmp[0]);
+    /*insertNodeTree( root, 25);*//*
+    for( int i = 0; i < size; i++ ){
+        insertNodeTree( root, tmp[i] );
+    }
+    printf("Root of tree is: %d and height is: %d\n", root->key,  root->height);
+    printTree( root );
+    printf("Balance Factor: %d", balanceFactor( root ));
+    printf("\n\n");
+
     
-    struct node *x = find( root , 1 );
-    printf( "Left rotate on %d.\n" , x->key );
     
-    x = leftRotation( &x );
-    printTree( x );
-    printf( "\nRoot is: %d.\n", x->key );
-    printf("Balance Factor: %d\n\n", balanceFactor( x ));
+    printf( "Left rotate on %d.\n" , root->key );
+    
+    root = leftRotation( &root );
+    printTree( root );
+    printf( "\nRoot is: %d.\n", root->key );
+    printf("Balance Factor: %d\n\n", balanceFactor( root ));
 
 
-    printf( "Right rotate on %d.\n" , x->key );
+    printf( "Right rotate on %d.\n" , root->key );
     
-    x = rightRotation( &x );
-    printTree( x );
-    printf( "\nRoot is: %d.\n", x->key );
-    printf("Balance Factor: %d", balanceFactor( x ));
-    
-
-    /*
-    struct node *x = find( root , 20 );
-    printf( "Right rotate on %d.\n" , x->key );
-    
-    x = rightRotation( &x );
-    printTree( x );
-    printf( "Root is: %d.\n", x->key );
+    root = rightRotation( &root );
+    printTree( root );
+    printf( "\nRoot is: %d.\n", root->key );
+    printf("Balance Factor: %d", balanceFactor( root ));
     */
+    
 
-    /*insertNodeTree( *rootTree, 1);
-
-    insertNodeTree( *rootTree, 3);
-    insertNodeTree( *rootTree, 4);
-    printf("Root: %d\n", root->key );
-    printTree( *rootTree );
-    printf("\nNo rotation\n");
-    printf("\n\n");
-
-    root = rightRotation( rootTree );
-    *rootTree = root;
-    printf("Root: %d\n", root->key );
-    printTree( *rootTree );
-    printf("\nRight rotation\n");
-    printf("\n\n");
-
-    root = leftRotation( rootTree );
-    *rootTree = root;
-    printf("Root: %d\n", root->key );
-    printTree( *rootTree );
-    printf("\nLeft rotation\n");
-    printf("\n\n");*/
+ 
 }
