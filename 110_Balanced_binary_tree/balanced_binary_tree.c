@@ -123,10 +123,10 @@ void rebalance( struct node **node ){
     struct node *tmp = *node;
     int bf = balanceFactor( tmp );
     /*bf == 2 --> left unbalnaced; 
-    bf == -2 --> right unbalanced */
-
-
     
+
+
+    bf == -2 --> right unbalanced */
     /*Case Right unbalanced tree*/
     if( bf == -2 ){
         
@@ -163,6 +163,8 @@ void rebalance( struct node **node ){
          *  [x]     [...]
          */
         tmp = leftRotation( &tmp );
+        
+    }else if( bf == 2 ){
         
     }
 
