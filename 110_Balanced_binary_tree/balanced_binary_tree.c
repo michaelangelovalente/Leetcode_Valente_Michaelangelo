@@ -8,16 +8,16 @@ struct node{
 };
 
 
+/*AVL tree*/
 struct node *newNode( int key );
 struct node *insertNodeTree( struct node *root, int key );
 
 struct node *rightRotation( struct node **node );
 struct node *leftRotation( struct node **node);
 
+void rebalance( struct node **node );
 
 /*Utilities*/
-
-
 void printTree_util( struct node *root , int dist);
 void printTree( struct node *root);
 int max( struct node *l, struct node *r);
@@ -74,12 +74,14 @@ struct node *insertNodeTree( struct node *root, int key ){
        
     if( key < root->key ){
         root->left = insertNodeTree( root->left, key);
-        
     }else{
         root->right = insertNodeTree( root->right, key);
     }
     /*check which height is greater (L or R ) that is now the height of root*/
     root->height = max( root->left, root->right) + 1;
+    if( abs( balanceFactor(root) ) == 2 ){
+        rebalance( &root );
+    }
     return root;
 }
 
@@ -122,11 +124,8 @@ int balanceFactor( struct node *node ){
 void rebalance( struct node **node ){
     struct node *tmp = *node;
     int bf = balanceFactor( tmp );
-    /*bf == 2 --> left unbalnaced; 
-    
 
-
-    bf == -2 --> right unbalanced */
+   /* bf == -2 --> right unbalanced */
     /*Case Right unbalanced tree*/
     if( bf == -2 ){
         
@@ -137,35 +136,71 @@ void rebalance( struct node **node ){
          *     \
          *      [y]
          *     /
-         * [...]
+         * [z]
          * rightRotation(y)
          *  [x]
          *     \
-         *      [y]
+         *      [z]
          *         \
-         *          [ ... ]
+         *          [y]
          */
-        if( bf == -1 ){
+        if( balanceFactor( tmp->right ) == 1 ){
             tmp->right = rightRotation( &(tmp->right) );
         }
         
-        /* bf(y) == -1 : Right unbalanced -> right sub tree*/
+        /* bf(z) == -1 : Right unbalanced -> right sub tree --> leftRotation(x)*/
         /**
          * @brief 
          *  [x]
          *     \
-         *      [y]
+         *      [z]
          *         \
-         *          [ ... ]
+         *          [y]
+         * 
          * leftRotation(x)
-         *      [y]
+         *      [z]
          *     /   \
-         *  [x]     [...]
+         *  [x]     [z]
          */
         tmp = leftRotation( &tmp );
         
-    }else if( bf == 2 ){
-        
+
+    }else if( bf == 2 ){/*bf == 2 --> left unbalanced; */
+
+        /* bf(y) == 1 : Left unbalanced -> right sub tree*/
+        /**
+         * @brief 
+         *       [x]
+         *      /  
+         *    [y]
+         *      \
+         *      [z]
+         * leftRotation(y)
+         *         [x]
+         *        /
+         *      [z]
+         *      /      
+         *  [y]
+         */
+        if( balanceFactor( tmp->left ) == -1){
+            tmp->left = leftRotation( &(tmp->left) );
+        }
+
+        /* bf(y) == -1 : Right unbalanced -> right sub tree*/
+        /**
+         * @brief 
+         *       [x]
+         *      /
+         *     [z]
+         *    /     
+         *  [y]
+         * 
+         * rightRotation(x)
+         *      [z]
+         *     /   \
+         *  [x]     [z]
+         */
+        tmp = rightRotation( &tmp );
     }
 
     /*Case Left unblanced tree*/
@@ -175,10 +210,9 @@ void rebalance( struct node **node ){
 }
 
 
+
 /*--------------------Utilities---------------------------------------------------*/
-
-
-/*Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
+/*printTree Source: https://www.geeksforgeeks.org/print-binary-tree-2-dimensions/*/
 void printTree_util( struct node *root , int dist){
     if( root == NULL ){
         dist += 7;
@@ -207,11 +241,11 @@ void printTree( struct node *root){
 
 int main( int argc, char *argv[]){
    
-    struct node *root = newNode( 1 );
-    int tmp[] = {2, 3  };
-    int size = sizeof(tmp)/sizeof(tmp[0]);
+    /*struct node *root = newNode( 3 );
+    int tmp[] = {1, 2  };
+    int size = sizeof(tmp)/sizeof(tmp[0]);*/
     /*insertNodeTree( root, 25);*/
-    for( int i = 0; i < size; i++ ){
+    /*for( int i = 0; i < size; i++ ){
         insertNodeTree( root, tmp[i] );
     }
     printf("Root of tree is: %d and height is: %d\n", root->key,  root->height);
@@ -223,38 +257,22 @@ int main( int argc, char *argv[]){
     rebalance( &root );
     printTree( root );
     printf("Balance Factor: %d", balanceFactor( root ));
-    printf("\n\n");
+    printf("\n\n");*/
    
-   /* struct node *root = newNode( 25 );
-    int tmp[] = {20, 36, 10, 22, 12, 30, 40, 28, 38, 48 };
+    /*struct node *root = newNode( 25 );
+    int tmp[] = {20, 36, 10, 22, 12, 30, 40, 28, 38, 48 };*/
+
+    struct node *root = newNode( 1 );
+    int tmp[] = { 2, 3, 4, 5, 6, 7, 8 };
     int size = sizeof(tmp)/sizeof(tmp[0]);
-    /*insertNodeTree( root, 25);*//*
     for( int i = 0; i < size; i++ ){
-        insertNodeTree( root, tmp[i] );
+        root = insertNodeTree( root, tmp[i] );
     }
     printf("Root of tree is: %d and height is: %d\n", root->key,  root->height);
     printTree( root );
     printf("Balance Factor: %d", balanceFactor( root ));
     printf("\n\n");
 
-    
-    
-    printf( "Left rotate on %d.\n" , root->key );
-    
-    root = leftRotation( &root );
-    printTree( root );
-    printf( "\nRoot is: %d.\n", root->key );
-    printf("Balance Factor: %d\n\n", balanceFactor( root ));
-
-
-    printf( "Right rotate on %d.\n" , root->key );
-    
-    root = rightRotation( &root );
-    printTree( root );
-    printf( "\nRoot is: %d.\n", root->key );
-    printf("Balance Factor: %d", balanceFactor( root ));
-    */
-    
 
  
 }
