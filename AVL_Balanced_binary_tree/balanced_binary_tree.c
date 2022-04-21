@@ -7,10 +7,20 @@ struct node{
     struct node *left, *right;
 };
 
+/**
+ * @brief 
+ * 
+ * balanced_binary_tree.c contains the complete operations for an AVL tree
+ * 
+ * 
+ * Need to add: delete()
+ */
 
 /*AVL tree*/
 struct node *newNode( int key );
 struct node *insertNodeTree( struct node *root, int key );
+
+
 
 struct node *rightRotation( struct node **node );
 struct node *leftRotation( struct node **node);
@@ -18,6 +28,7 @@ struct node *leftRotation( struct node **node);
 void rebalance( struct node **node );
 
 /*Utilities*/
+
 void printTree_util( struct node *root , int dist);
 void printTree( struct node *root);
 int max( struct node *l, struct node *r);
@@ -273,6 +284,12 @@ int main( int argc, char *argv[]){
     printf("Balance Factor: %d", balanceFactor( root ));
     printf("\n\n");
 
-
- 
+    int number_to_be_found = -7;
+    struct node *is_present = find( root, number_to_be_found );
+    if( is_present ){
+        printf("%d is present.\n", is_present->key);
+    }else{
+        printf("%d is not present.\n");
+    }
+    
 }
