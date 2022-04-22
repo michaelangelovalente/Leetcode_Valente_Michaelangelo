@@ -110,13 +110,15 @@ int height( struct TreeNode *root){
     return max( height(root->left), height(root->right))+1;
 }
 
+
+/**The leetcode solution*/
 bool isBalanced(struct TreeNode* root){
-    if( abs( balanceFactor( root)) < 2 ){
+
+    if(!root || ( abs( balanceFactor( root )) < 2 && isBalanced( root->left) && isBalanced(root->right) ) ){
         return true;
     }
     return false;
 }
-
 
 
 
