@@ -2,8 +2,7 @@
 ## Data Structures and Algorithms in C, OOP practice in Java, and SQL
 
 ### In progress
-- [ ] 1. Two sums ( DS used: AVL, HashMap ) *Note: Need to finish 110. **Balanced Binary Tree** first*
-- [x] 110. Balanced Binary Tree ( DS used: AVL #note -> balanced_binary_tree.c contains complete operation for an AVL tree. ) **&#129144;**
+- [ ] 1. Two sums ( DS used: AVL, HashMap ) *Note: Need to finish 110. **Balanced Binary Tree** first***&#129144;**
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
@@ -11,6 +10,7 @@
 - [ ] 1202. smallest string with swaps
 ----
 ### Done
+- [x] 110. Balanced Binary Tree ( DS used: AVL )
 - [x] 136. Single Number ( used XOR boolean l. ) 
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
