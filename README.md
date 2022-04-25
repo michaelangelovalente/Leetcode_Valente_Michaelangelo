@@ -2,12 +2,13 @@
 ## Data Structures and Algorithms in C, OOP practice in Java, and SQL
 
 ### In progress
-- [ ] 1. Two sums ( DS used: AVL, HashMap ) *Note: Need to finish 110. **Balanced Binary Tree** first***&#129144;**
+- [ ] 1. Two sums ( DS used: AVL, HashMap ) 
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
 - [ ] 1168. Optimize water distribution in a village
 - [ ] 1202. smallest string with swaps
+- [ ] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) **&#129144;**
 ----
 ### Done
 - [x] 110. Balanced Binary Tree ( DS used: AVL )
