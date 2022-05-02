@@ -37,17 +37,24 @@
     Input: points = [[3,12],[-2,5],[-4,1]]
     Output: 18
  * 
-    ---------------------------------
-    ---------
-    Algorithm used to solve the problem: Kruskal's Algorithm
-        - We first sort
+    -------------------------------- --------------------------------- -----------------------
+    |-------- Solution Algorithm and Data structures used with a quick explanation ----------|
+    --------------------------------- --------------------------------- ----------------------
+    (1) Algorithm used to solve the problem: Kruskal's Algorithm
 
     ----------
-    DS used for support: Union-Find / Disjoint set --> we need to implement find(a), union(a,b), 
-    makeset(size) (makeset() will take the Size/number of vertices. In the problem this is the pointsSize variable )
-    We use union-find by rank with path compression.
+    (2) DS used for support: Union-Find / Disjoint set, this will then
+    be used to create ( store the edges ) our MST Tree.
 
-    (Note: remb=ember that the union by rank optmization
+    Implementation: 
+    We need to implement the operations: find(a), union(a,b), 
+    makeset(size) (makeset() will take the Size/number of vertices. 
+
+    (In the leetcode problem this is the pointsSize variable )
+
+    We will also use union-find by rank with path compression.
+
+    (Note: rembember that the union by rank optmization
     is used to optimize the quick-union version of union by rank, this
     is due to the quick-find version having a time complexity of O(1) already )
 
@@ -69,9 +76,102 @@
     Arr_rank -->  [2] [N] [N] [N]  <---- rank/height  ( we only consider the heigh of the root of each group. In this case, the root of the group has vertex name '0' with height )
              idx:  0   1   2   3   <--- vrtx names
 
-    
+    (3) Priority queue using MinHeap:
+        We use the PQ( abstract data type) to store the generated edges, 
+        with key(weight) the manhattan distance. 
 
+        The PQ ( abstract data type) is an 
+        efficient way to do this since when we store our edge, 
+        it will 'automatically' sort it, we will only then need to extract
+        n edges, which will be the smallest n edges, that will allow us to build an MST.
+
+        ( An alternative solution could be to generate  the edges and store them inside an array, 
+        and then sort them, we use the PQ, for learning and optimization purposes. ).
+        
+        Implementation:
+            We will use a minHeap data structure to implement the priority queue.
+            We need to implement the operations:
+            makePq(), peek(), remove(), insert().
+            ( We will also create the auxiliary functions: heapifyup() and heapifydown(),
+              father(), leftchild(), rightchild() )
+    ------ 
 */
+/**FUNCTIONS*/
+struct edge;
+int getKey(struct edge *e);
+
+/*******************/
+
+
+/***** Priority queue Abstract Data type ( using the Min Heap Data Structure ) */
+struct edge{
+    int vrtx_x, vrtx_y;
+    int weight;
+};
+struct Pq{
+    struct edge **Edge;
+    int size;
+};
+
+
+
+
+
+/** 
+ * makePq( int size ) takes an integer size, and creates the array where we will store the
+ * vertices of a Priority queue.
+ */
+struct Pq *makePq( int size ){
+    struct Pq *pq = calloc(1, sizeof(struct Pq ));
+    pq->Edge = calloc(size+1, sizeof( struct edge*));//this is size+1 because we will ignore position 0.
+    return pq;
+}
+
+
+void insertPq( struct Pq *pq, struct edge *edge){
+    pq->Edge[++pq->size] = edge;
+    
+    if( pq->size > 1  ){
+        //reaheapifyup
+    }
+
+}
+
+
+
+/**Auxiliary functions*/
+
+void printPq(struct Pq *pq){
+    for( int i = 1; i <= pq->size; i++){
+        printf("Edge[%d] -> vertices: ( %d, %d) - [key:%d]\n",i, pq->Edge[i]->vrtx_x, pq->Edge[i]->vrtx_y, getKey(pq->Edge[i]) );
+    }
+}
+void swap(struct edge **e1, struct edge **e2 ){
+    struct edge *tmp = *e1;
+    *e1 = *e2;
+    *e2 = tmp;
+}
+int getKey(struct edge *e){
+    return e->weight;
+}
+int father( int child){
+    return child/2;
+}
+
+int leftChild(int father ){
+    return father*2;
+}
+
+int rightChild(int father){
+    return father*2+1;
+}
+
+
+
+
+
+
+/***** Union-Find (quickUnion by rank variation) Data Structure */
 struct rankUnionFind {
     int *root;
     int *height;
@@ -99,10 +199,31 @@ int find( int a, struct rankUnionFind *data){
  * If they already belong to the same group, we do not do anything, and return false (edge was not added).
  * otherwise true(edge was added)
  ***/
-bool q_unionbyRank( int a, int b){
+bool q_unionbyRank( struct rankUnionFind *ds, int a, int b){
+    int root_a = find( a, ds) , root_b = find(b, ds);
+    if(root_a == root_b){
+        return false;
+    }
+    if( ds->height[root_a] > ds->height[root_b]){
+        //root_a is the new root of root_b 
+        //height of a does not change.
+        ds->root[root_b] = root_a;
 
-    return false;
+    }else if( ds->height[root_a] < ds->height[root_b]){
+        //root_b is the new root of root_a
+        //height of b does not change
+        ds->root[root_a] = root_b;
+
+
+    }else{//height of root_a and root_b are the same --> height of root_a ( new root) is now old height + 1 
+        ds->root[root_b] = root_a;
+        ds->height[root_a] = ds->height[root_a] + 1;
+        
+    }
+    return true;
 }
+
+
 
 void print_disjS( struct rankUnionFind *ds, int size){
     printf("root: ");
@@ -111,7 +232,11 @@ void print_disjS( struct rankUnionFind *ds, int size){
         printf("[%d]");
     }
 }
-/*------------------------------------*/
+
+
+
+
+/*-------------------  The leetcode Solution  -----------------*/
 /**manhattan distance <- |xi - xj| + |yi - yj|*/
 int manhDist( int *a, int *b ){
     return abs( b[1] - a[1] ) + abs( b[0] - a[0] );
@@ -140,7 +265,7 @@ int main(int argc, char *argv[]){
         printf("\n\n");
     }*/
 
-    struct rankUnionFind *new_DS = makeset(7);
+    /*struct rankUnionFind *new_DS = makeset(7);
     int arr[] = { 0, 0, 0, 1, 3, 5, 5};
     int size = sizeof( arr )/sizeof(arr[0]);
     for( int i = 0; i < size; i++){
@@ -163,8 +288,72 @@ int main(int argc, char *argv[]){
     printf("\n");
     for( int j = 0; j < size; j++ ){
         printf("vertex(%d) -> root(%d) \n", j,find(j, new_DS)  );
+    }*/
+
+    /*
+    struct rankUnionFind *new_DS = makeset(7);
+    int arr[] = { 0, 0, 0, 1, 3, 5, 5, 6, 7};
+    int rank[] = { 3, 2, 0, 1, 0, 3, 2, 1, 0 };
+    int size = sizeof( arr )/sizeof(arr[0]);
+    for( int i = 0; i < size; i++){
+        new_DS->root[i] = arr[i];
     }
-    
+
+    for( int i = 0; i < size; i++){
+        new_DS->height[i] = rank[i];
+    }
+
+    printf("Before Union:\n");
+    for( int j = 0; j < size; j++){
+        printf("[%d]", new_DS->root[j]);
+    }
+    printf("\n");
+    for( int j = 0; j < size; j++){
+        printf("[%d]", new_DS->height[j]);
+    }
+    printf("\n");
+
+    if( q_unionbyRank( new_DS, 2, 5 ) ){
+        printf("Union worked!\n\n");
+    }else{
+        printf("Union did not work\n\n");
+    }
+    printf("After Union:\n");
+    for( int j = 0; j < size; j++){
+        printf("[%d]", new_DS->root[j]);
+    }
+    printf("\n");
+    for( int j = 0; j < size; j++){
+        printf("[%d]", new_DS->height[j]);
+    }
+    printf("\n");
+    */
+   /*
+   struct edge *arr1 = calloc(1, sizeof(struct edge));
+   arr1->vrtx_x = 2; arr1->vrtx_y=2; arr1->weight=222;
+
+   struct edge *arr2 = calloc(1, sizeof(struct edge));
+   arr2->vrtx_x = 3; arr2->vrtx_y=3; arr2->weight=333;
+
+   printf("edge1->[%d,%d], key:%d\n" , arr1->vrtx_x, arr1->vrtx_y, arr1->weight);
+   printf("edge2->[%d,%d], key:%d\n" , arr2->vrtx_x, arr2->vrtx_y, arr2->weight);
+
+   swap(&arr1, &arr2);
+
+   printf("edge1->[%d,%d], key:%d\n" , arr1->vrtx_x, arr1->vrtx_y, arr1->weight);
+   printf("edge2->[%d,%d], key:%d\n" , arr2->vrtx_x, arr2->vrtx_y, arr2->weight);
+   */
+  struct Pq *priority_queue = makePq( 5 );
+  //generating edges
+    for( int i = 0; i < 5; i++ ){
+        struct edge *e = calloc( 1, sizeof( struct edge ));
+        e->vrtx_x = i;
+        e->vrtx_y = -i;
+        e->weight = i*5;
+        insertPq( priority_queue, e );
+    }
+
+    printPq( priority_queue);
 
 
 
