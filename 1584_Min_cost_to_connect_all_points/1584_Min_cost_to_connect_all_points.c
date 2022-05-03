@@ -96,11 +96,34 @@
               father(), leftchild(), rightchild() )
     ------ 
 */
-/**FUNCTIONS*/
+
+/** ----------------- Prototypes -----------------------*/
+
+
+// ------- Priority queue prototypes------ //
 struct edge;
+struct Pq *pq;
+
+// main functions
+struct Pq *makePq( int size );
+void insertPq( struct Pq *pq, struct edge *edge);
+struct edge *extract( struct Pq *pq );
+
+//auxiliary functions
+void heapifydown( struct Pq *pq , int parent_idx );
+void heapifyup( struct Pq *pq , int i );
+struct edge *new_edge( int x, int y, int key);
 int getKey(struct edge *e);
 
-/*******************/
+void swap(struct edge **e1, struct edge **e2 );
+int father( int child);
+int leftChild(int father );
+int rightChild(int father);
+
+
+void printPq(struct Pq *pq);
+// -------------------------------------------------- //
+
 
 
 /***** Priority queue Abstract Data type ( using the Min Heap Data Structure ) */
@@ -112,9 +135,6 @@ struct Pq{
     struct edge **Edge;
     int size;
 };
-
-
-
 
 
 /** 
@@ -129,23 +149,73 @@ struct Pq *makePq( int size ){
 
 
 void insertPq( struct Pq *pq, struct edge *edge){
-    pq->Edge[++pq->size] = edge;
+    pq->Edge[++pq->size] = edge;//insert new edge
     
     if( pq->size > 1  ){
+        // if father's key < child's key
         //reaheapifyup
+        
+        heapifyup( pq, pq->size );
     }
 
 }
 
+struct edge *extract( struct Pq *pq ){
+    struct edge *retEdge = pq->Edge[1];
+    swap( &(pq->Edge[1]) , &( pq->Edge[pq->size] ) );
+    pq->size--;
+    heapifydown( pq, 1 );
+    return retEdge;
+}
+
+/**Auxiliary functions*/ // <--------------- Need to fix this
+void heapifydown( struct Pq *pq , int parent_idx ){
+    // if rightchild or leftchild > size --> no more children
+    int left_child = leftChild( parent_idx);
+    int right_child = rightChild(parent_idx);
+    int smallest_child;
+    if( left_child <= pq->size ){ // parent has at least one child
+        if( left_child == pq->size){ // parent has only one child
+            smallest_child = left_child;
+        }else{
+            smallest_child =  getKey( pq->Edge[left_child] ) < getKey( pq->Edge[right_child] ) ? left_child : right_child;
+        }
+
+        if( getKey(pq->Edge[smallest_child]) < getKey(pq->Edge[parent_idx]) ){
+            swap( &(pq->Edge[smallest_child]) , &(pq->Edge[parent_idx]) );
+            heapifydown( pq, smallest_child );
+        }
+    }
+}
+
+void heapifyup( struct Pq *pq , int i ){
+    if( i > 1 ){
+        int parent = father(i);
+        if( getKey(pq->Edge[parent]) > getKey( pq->Edge[i] ) ){
+            swap( &(pq->Edge[parent]), &(pq->Edge[i]) );
+            heapifyup( pq, parent);
+        }
+        
+    }
+    return;
+}
 
 
-/**Auxiliary functions*/
+
+struct edge *new_edge( int x, int y, int key){
+    struct edge *e = calloc( 1, sizeof( struct edge ));
+    e->vrtx_x = x;
+    e->vrtx_y = y;
+    e->weight = key;
+}
 
 void printPq(struct Pq *pq){
     for( int i = 1; i <= pq->size; i++){
         printf("Edge[%d] -> vertices: ( %d, %d) - [key:%d]\n",i, pq->Edge[i]->vrtx_x, pq->Edge[i]->vrtx_y, getKey(pq->Edge[i]) );
     }
 }
+
+
 void swap(struct edge **e1, struct edge **e2 ){
     struct edge *tmp = *e1;
     *e1 = *e2;
@@ -165,9 +235,6 @@ int leftChild(int father ){
 int rightChild(int father){
     return father*2+1;
 }
-
-
-
 
 
 
@@ -343,18 +410,36 @@ int main(int argc, char *argv[]){
    printf("edge1->[%d,%d], key:%d\n" , arr1->vrtx_x, arr1->vrtx_y, arr1->weight);
    printf("edge2->[%d,%d], key:%d\n" , arr2->vrtx_x, arr2->vrtx_y, arr2->weight);
    */
-  struct Pq *priority_queue = makePq( 5 );
+  int size = 8;
+  struct Pq *priority_queue = makePq( size );
   //generating edges
-    for( int i = 0; i < 5; i++ ){
-        struct edge *e = calloc( 1, sizeof( struct edge ));
-        e->vrtx_x = i;
-        e->vrtx_y = -i;
-        e->weight = i*5;
+    for( int i = 1; i < size; i++ ){
+        int valtmp = i*size;
+        struct edge *e = new_edge(i, i, valtmp );
         insertPq( priority_queue, e );
     }
 
     printPq( priority_queue);
-
-
-
+    printf("Size:%d\n", priority_queue->size);
+    struct edge *extractEdge = extract( priority_queue );
+    printf("Edge[%d] -> vertices: ( %d, %d) - [key:%d]\n",1, extractEdge->vrtx_x, extractEdge->vrtx_y, getKey(extractEdge) );
+    printf("Extracted: %d\n", extractEdge->weight);
+    printf("\n");
+    printPq( priority_queue);
+    
+   /*
+    struct Pq *priority_queue = makePq( 5 );
+     
+    struct edge *e = new_edge( 1, 1, 1);
+    insertPq( priority_queue, e );
+    printPq( priority_queue);
+    printf("\n");
+    struct edge *e2 = new_edge( 2, 2, 2);
+    insertPq( priority_queue, e2 );
+    printPq( priority_queue);
+    printf("\n");
+    struct edge *e3 = new_edge( -2, -2, -2);
+    insertPq( priority_queue, e3 );
+    printPq( priority_queue);
+    */
 }
