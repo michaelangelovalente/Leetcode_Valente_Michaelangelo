@@ -143,20 +143,16 @@ struct Pq{
  */
 struct Pq *makePq( int size ){
     struct Pq *pq = calloc(1, sizeof(struct Pq ));
-    pq->Edge = calloc(size+1, sizeof( struct edge*));//this is size+1 because we will ignore position 0.
+    pq->Edge = calloc(size+1, sizeof( struct edge *));//this is size+1 because we will ignore position 0.
     return pq;
 }
 
 
 void insertPq( struct Pq *pq, struct edge *edge){
-    pq->Edge[++pq->size] = edge;//insert new edge
     
-    if( pq->size > 1  ){
-        // if father's key < child's key
-        //reaheapifyup
-        
-        heapifyup( pq, pq->size );
-    }
+    pq->Edge[++pq->size] = edge;//insert new edge
+    heapifyup( pq, pq->size );
+    return;
 
 }
 
@@ -168,7 +164,7 @@ struct edge *extract( struct Pq *pq ){
     return retEdge;
 }
 
-/**Auxiliary functions*/ // <--------------- Need to fix this
+/**Auxiliary functions*/ //
 void heapifydown( struct Pq *pq , int parent_idx ){
     // if rightchild or leftchild > size --> no more children
     int left_child = leftChild( parent_idx);
@@ -188,14 +184,15 @@ void heapifydown( struct Pq *pq , int parent_idx ){
     }
 }
 
-void heapifyup( struct Pq *pq , int i ){
+void heapifyup( struct Pq *pq , int i ){ // <--- NEED TO FIX THIS
     if( i > 1 ){
         int parent = father(i);
-        if( getKey(pq->Edge[parent]) > getKey( pq->Edge[i] ) ){
+        int keyParent = getKey(pq->Edge[parent]);
+        int keyChild = getKey( pq->Edge[i] );
+        if( parent >= 1 && keyParent > keyChild ){
             swap( &(pq->Edge[parent]), &(pq->Edge[i]) );
             heapifyup( pq, parent);
         }
-        
     }
     return;
 }
@@ -306,140 +303,59 @@ void print_disjS( struct rankUnionFind *ds, int size){
 /*-------------------  The leetcode Solution  -----------------*/
 /**manhattan distance <- |xi - xj| + |yi - yj|*/
 int manhDist( int *a, int *b ){
-    return abs( b[1] - a[1] ) + abs( b[0] - a[0] );
+    return   abs( a[0] - b[0] ) + abs( a[1] - b[1]  );
 }
 
 int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
     
+    struct Pq *PQ = makePq( pointsSize );
+    // Generate all the edges and store the edges in a priority queue
+        for( int i = 0; i < pointsSize; i++){
+            //dist <-- manhattan distance between vertex: i  and vertex: i+1
+            for(int j = i; j < pointsSize; j++){
+                if( i != j ){
+                    int dist = manhDist( points[i], points[j]);
+                    struct edge *e = new_edge( i, j, dist );
+                    printf("(%d,%d)k:%d\n", i, j, dist);
+                    insertPq( PQ, e);    
+                }
+                
+            }
+            
+
+        }
+        printf("\n--------------------------------------\n");
+        printPq(PQ);
+
     return 0;
 }
 
 int main(int argc, char *argv[]){
 
-    /*
+    
     int points[][2] = {{0,0},{2,2},{3,10},{5,2},{7,0}};
     /*int points[][2] = {{3,12},{-2,5},{-4,1}};*/
-    /*
-    int sizeArr = sizeof( points)/ sizeof(points[0]);
     
+    int sizeArr = sizeof( points)/ sizeof(points[0]);
+    int **ptr_points = calloc( sizeArr, sizeof( int *));
     for( int i = 0; i < sizeArr; i++ ){
+        ptr_points[i] = calloc( 2, sizeof(int));
+        ptr_points[i][0] = points[i][0];
+        ptr_points[i][1] = points[i][1];
+        
         for(int j = i; j < sizeArr; j++){
+            
             if( i != j ){
                 printf("EDGE:%d -> %d -- Weight:%d\n", i, j, manhDist( points[i], points[j]  ));
             }
             
         }
-        printf("\n\n");
-    }*/
-
-    /*struct rankUnionFind *new_DS = makeset(7);
-    int arr[] = { 0, 0, 0, 1, 3, 5, 5};
-    int size = sizeof( arr )/sizeof(arr[0]);
-    for( int i = 0; i < size; i++){
-        new_DS->root[i] = arr[i];
-    }
-    printf("Before path compression:");
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->root[j]);
-    }
-    printf("\n");
-    for( int j = 0; j < size; j++ ){
-        printf("vertex(%d) -> root(%d) \n", j,find(j, new_DS)  );
+        printf("\n");
     }
 
-    printf("\nAfter path compression:");
+    printf("--------------------------------\n");
+    int colSize = 2;
+    int tmp = minCostConnectPoints( ptr_points, sizeArr, &colSize );
 
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->root[j]);
-    }
-    printf("\n");
-    for( int j = 0; j < size; j++ ){
-        printf("vertex(%d) -> root(%d) \n", j,find(j, new_DS)  );
-    }*/
 
-    /*
-    struct rankUnionFind *new_DS = makeset(7);
-    int arr[] = { 0, 0, 0, 1, 3, 5, 5, 6, 7};
-    int rank[] = { 3, 2, 0, 1, 0, 3, 2, 1, 0 };
-    int size = sizeof( arr )/sizeof(arr[0]);
-    for( int i = 0; i < size; i++){
-        new_DS->root[i] = arr[i];
-    }
-
-    for( int i = 0; i < size; i++){
-        new_DS->height[i] = rank[i];
-    }
-
-    printf("Before Union:\n");
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->root[j]);
-    }
-    printf("\n");
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->height[j]);
-    }
-    printf("\n");
-
-    if( q_unionbyRank( new_DS, 2, 5 ) ){
-        printf("Union worked!\n\n");
-    }else{
-        printf("Union did not work\n\n");
-    }
-    printf("After Union:\n");
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->root[j]);
-    }
-    printf("\n");
-    for( int j = 0; j < size; j++){
-        printf("[%d]", new_DS->height[j]);
-    }
-    printf("\n");
-    */
-   /*
-   struct edge *arr1 = calloc(1, sizeof(struct edge));
-   arr1->vrtx_x = 2; arr1->vrtx_y=2; arr1->weight=222;
-
-   struct edge *arr2 = calloc(1, sizeof(struct edge));
-   arr2->vrtx_x = 3; arr2->vrtx_y=3; arr2->weight=333;
-
-   printf("edge1->[%d,%d], key:%d\n" , arr1->vrtx_x, arr1->vrtx_y, arr1->weight);
-   printf("edge2->[%d,%d], key:%d\n" , arr2->vrtx_x, arr2->vrtx_y, arr2->weight);
-
-   swap(&arr1, &arr2);
-
-   printf("edge1->[%d,%d], key:%d\n" , arr1->vrtx_x, arr1->vrtx_y, arr1->weight);
-   printf("edge2->[%d,%d], key:%d\n" , arr2->vrtx_x, arr2->vrtx_y, arr2->weight);
-   */
-  int size = 8;
-  struct Pq *priority_queue = makePq( size );
-  //generating edges
-    for( int i = 1; i < size; i++ ){
-        int valtmp = i*size;
-        struct edge *e = new_edge(i, i, valtmp );
-        insertPq( priority_queue, e );
-    }
-
-    printPq( priority_queue);
-    printf("Size:%d\n", priority_queue->size);
-    struct edge *extractEdge = extract( priority_queue );
-    printf("Edge[%d] -> vertices: ( %d, %d) - [key:%d]\n",1, extractEdge->vrtx_x, extractEdge->vrtx_y, getKey(extractEdge) );
-    printf("Extracted: %d\n", extractEdge->weight);
-    printf("\n");
-    printPq( priority_queue);
-    
-   /*
-    struct Pq *priority_queue = makePq( 5 );
-     
-    struct edge *e = new_edge( 1, 1, 1);
-    insertPq( priority_queue, e );
-    printPq( priority_queue);
-    printf("\n");
-    struct edge *e2 = new_edge( 2, 2, 2);
-    insertPq( priority_queue, e2 );
-    printPq( priority_queue);
-    printf("\n");
-    struct edge *e3 = new_edge( -2, -2, -2);
-    insertPq( priority_queue, e3 );
-    printPq( priority_queue);
-    */
 }
