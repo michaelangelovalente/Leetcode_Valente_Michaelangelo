@@ -76,24 +76,11 @@
     Arr_rank -->  [2] [N] [N] [N]  <---- rank/height  ( we only consider the heigh of the root of each group. In this case, the root of the group has vertex name '0' with height )
              idx:  0   1   2   3   <--- vrtx names
 
-    (3) Priority queue using MinHeap:
-        We use the PQ( abstract data type) to store the generated edges, 
-        with key(weight) the manhattan distance. 
+    
 
-        The PQ ( abstract data type) is an 
-        efficient way to do this since when we store our edge, 
-        it will 'automatically' sort it, we will only then need to extract
-        n edges, which will be the smallest n edges, that will allow us to build an MST.
-
-        ( An alternative solution could be to generate  the edges and store them inside an array, 
-        and then sort them, we use the PQ, for learning and optimization purposes. ).
-        
-        Implementation:
-            We will use a minHeap data structure to implement the priority queue.
-            We need to implement the operations:
-            makePq(), peek(), remove(), insert().
-            ( We will also create the auxiliary functions: heapifyup() and heapifydown(),
-              father(), leftchild(), rightchild() )
+    Quick sort the edges by weight ( A better implementation, that might be more complexy, could be 
+    done by using a priority queue DS, We store our edge, using manhattan distance as the key value, and 
+    extract n ( number of vertices) edges, we then add the key values of the edges extracted, and obtain the solution.)
     ------ 
 */
 
@@ -106,7 +93,7 @@ struct Pq *pq;
 
 // main functions
 struct Pq *makePq( int size );
-void insertPq( struct Pq *pq, struct edge *edge);
+void insertPq( struct Pq *pq, int x, int y, int key );
 struct edge *extract( struct Pq *pq );
 
 //auxiliary functions
@@ -134,6 +121,7 @@ struct edge{
 struct Pq{
     struct edge **Edge;
     int size;
+    int max_size;
 };
 
 
@@ -144,13 +132,28 @@ struct Pq{
 struct Pq *makePq( int size ){
     struct Pq *pq = calloc(1, sizeof(struct Pq ));
     pq->Edge = calloc(size+1, sizeof( struct edge *));//this is size+1 because we will ignore position 0.
+    pq->max_size = size+1;
     return pq;
 }
 
 
-void insertPq( struct Pq *pq, struct edge *edge){
+void insertPq( struct Pq *pq, int x, int y, int key ){
+    //New Edge 
+   /* struct edge *new_edge = calloc( 1, sizeof( struct edge *));
+    new_edge->vrtx_x = x;
+    new_edge->vrtx_y = y;
+    new_edge->weight = key;
+
+    pq->Edge[++pq->size] = new_edge;//insert new edge
+    */
+    ++pq->size;
+    int idx = pq->size;
+    pq->Edge[idx] = calloc( 1, sizeof( struct edge *));
+    pq->Edge[idx]->vrtx_x = x;
+    pq->Edge[idx]->vrtx_y = y;
+    pq->Edge[idx]->weight = key;
+
     
-    pq->Edge[++pq->size] = edge;//insert new edge
     heapifyup( pq, pq->size );
     return;
 
@@ -315,9 +318,8 @@ int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
             for(int j = i; j < pointsSize; j++){
                 if( i != j ){
                     int dist = manhDist( points[i], points[j]);
-                    struct edge *e = new_edge( i, j, dist );
                     printf("(%d,%d)k:%d\n", i, j, dist);
-                    insertPq( PQ, e);    
+                    insertPq( PQ, i, j, dist);    
                 }
                 
             }
