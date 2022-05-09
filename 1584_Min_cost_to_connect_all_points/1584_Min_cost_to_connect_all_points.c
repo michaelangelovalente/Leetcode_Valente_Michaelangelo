@@ -251,6 +251,24 @@ void printArrayE( struct edge **array, int size ){
     printf("\n");
 }
 int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
+    // ((pointsSize-1) * ( pointsSize-1 +1 ))/2; --> sum of first n ( == edges ) numbers --> number of unique edges;
+    int arraySize = ((pointsSize-1) * ( pointsSize ))/2;
+    struct edge **arrayE = calloc( arraySize , sizeof( struct edge *));
+    int numOfEls = 0; // find a better solution.
+    for( int i = 0; i < pointsSize; i++ ){ // need to fix indexes of allocation!
+        for( int j = i+1; j < pointsSize; j++ ){
+            arrayE[numOfEls++] = new_edge( i,j, manhDist( points[i], points[j] ) );
+        }
+    }
+    
+    QuickSort( arrayE, arraySize );
+    printArrayE( arrayE, arraySize );
+
+    //We make space for a disjointset of size n-1 ( number of vertices - 1)
+    struct rankUnionFind *uf = makeset( pointsSize-1 );
+    
+
+
     return 0;
 }
 
@@ -268,10 +286,10 @@ struct edge *new_edge( int x, int y, int key ){
 
 int main(int argc, char *argv[]){
 
-    /*
-    int points[][2] = {{0,0},{2,2},{3,10},{5,2},{7,0}};*/
+    
+    int points[][2] = {{0,0},{2,2},{3,10},{5,2},{7,0}};
     /*int points[][2] = {{3,12},{-2,5},{-4,1}};*/
-    /*
+    
     int sizeArr = sizeof( points)/ sizeof(points[0]);
     int **ptr_points = calloc( sizeArr, sizeof( int *));
     for( int i = 0; i < sizeArr; i++ ){
@@ -279,19 +297,15 @@ int main(int argc, char *argv[]){
         ptr_points[i][0] = points[i][0];
         ptr_points[i][1] = points[i][1];
         
-        for(int j = i; j < sizeArr; j++){
-            
-            if( i != j ){
-                printf("EDGE:%d -> %d -- Weight:%d\n", i, j, manhDist( points[i], points[j]  ));
-            }
-            
+        for(int j = i+1; j < sizeArr; j++){
+            printf("EDGE:%d -> %d -- Weight:%d\n", i, j, manhDist( points[i], points[j]  ));
         }
         printf("\n");
     }
 
     printf("--------------------------------\n");
     int colSize = 2;
-    int tmp = minCostConnectPoints( ptr_points, sizeArr, &colSize );*/
+    int tmp = minCostConnectPoints( ptr_points, sizeArr, &colSize );
 
 
     /*
