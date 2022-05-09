@@ -224,40 +224,9 @@ bool q_unionbyRank( struct rankUnionFind *ds, int a, int b){
 
 
 
-void print_disjS( struct rankUnionFind *ds, int size){
-    printf("root: ");
-    for( int i = 0; i < size; i++){
-        printf("[%d]", ds->root[i]);
-    }
-    printf("\n");
-    printf("      ");
-    for( int i = 0; i < size; i++){
-        printf(" %d ", i);
-    }
-    printf("\n");
-    printf("height: ");
-    for( int i = 0; i < size ; i++){
-        printf("[%d]", ds->height[i]);
-    }
-    printf("\n");
-}
-
-
-
-
 /*-------------------  The leetcode Solution  -----------------*/
 /**manhattan distance <- |xi - xj| + |yi - yj|*/
 
-void printArrayE( struct edge **array, int size ){
-    for( int i = 0; i < size; i++){
-        printf("(%d, %d)  |",array[i]->vrtx_x , array[i]->vrtx_y );
-    }
-    printf("\n");
-    for( int i = 0; i < size; i++){
-        printf("key[%d] |", getKey( array[i]));
-    }
-    printf("\n");
-}
 int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
     // ((pointsSize-1) * ( pointsSize-1 +1 ))/2; --> sum of first n ( == edges ) numbers --> number of unique edges;
     int arraySize = ((pointsSize-1) * ( pointsSize ))/2;
@@ -306,50 +275,4 @@ struct edge *new_edge( int x, int y, int key ){
     new->vrtx_y = y;
     new->weight = key;
     return new;
-}
-
-
-int main(int argc, char *argv[]){
-
-    
-    int points[][2] = {{0,0},{2,2},{3,10},{5,2},{7,0}};
-    /*int points[][2] = {{3,12},{-2,5},{-4,1}};*/
-    
-    int sizeArr = sizeof( points)/ sizeof(points[0]);
-    int **ptr_points = calloc( sizeArr, sizeof( int *));
-    for( int i = 0; i < sizeArr; i++ ){
-        ptr_points[i] = calloc( 2, sizeof(int));
-        ptr_points[i][0] = points[i][0];
-        ptr_points[i][1] = points[i][1];
-        
-        for(int j = i+1; j < sizeArr; j++){
-            printf("EDGE:%d -> %d -- Weight:%d\n", i, j, manhDist( points[i], points[j]  ));
-        }
-        printf("\n");
-    }
-
-    printf("--------------------------------\n");
-    int colSize = 2;
-    int tmp = minCostConnectPoints( ptr_points, sizeArr, &colSize );
-
-    printf("Result: %d", tmp);
-    /*
-    int arr[] = { 24, 8, 31, 16, 17, 40, 29, 23, 27};
-    int size = sizeof(arr)/sizeof(arr[0]);
-
-    struct edge **arrayE = calloc( size, sizeof( struct edge *));
-    for( int i = 0; i < size; i++ ){
-        arrayE[i] = new_edge( i,i, arr[i] );
-    }
-
-    printArrayE( arrayE, size );
-    printf("\nAfter partition\n");
-
-    printf("returned pivot:%d\n",partition( arrayE, 0, size));
-    printArrayE( arrayE, size );
-
-    printf("\nAfter sort\n");
-    QuickSort( arrayE, size);
-    printArrayE( arrayE, size );
-    */
 }
