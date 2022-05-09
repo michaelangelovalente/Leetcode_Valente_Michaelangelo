@@ -183,12 +183,15 @@ struct rankUnionFind *makeset(int size){
     struct rankUnionFind *disjointSet = calloc( 1, sizeof(struct rankUnionFind));
     disjointSet->root = calloc(size,sizeof(int));
     disjointSet->height = calloc(size,sizeof(int));
+    // The set is initally full of 'size' disconnected components of height 0;
+    for(int i = 0; i < size; i++){
+        disjointSet->root[i] = i;
+    }
     return disjointSet;
 }
 
 /**find(a) returns the ID of the group in which node a belongs to*/
 int find( int a, struct rankUnionFind *data){
-    // need to add path compression!
     if( a == data->root[a]){
         return a;
     }
@@ -202,7 +205,7 @@ int find( int a, struct rankUnionFind *data){
  ***/
 bool q_unionbyRank( struct rankUnionFind *ds, int a, int b){
     int root_a = find( a, ds) , root_b = find(b, ds);
-    if(root_a == root_b){
+    if( root_a == root_b ){
         return false;
     }
     if( ds->height[root_a] > ds->height[root_b]){
@@ -228,10 +231,20 @@ bool q_unionbyRank( struct rankUnionFind *ds, int a, int b){
 
 void print_disjS( struct rankUnionFind *ds, int size){
     printf("root: ");
-    int j = 0;
     for( int i = 0; i < size; i++){
-        printf("[%d]");
+        printf("[%d]", ds->root[i]);
     }
+    printf("\n");
+    printf("      ");
+    for( int i = 0; i < size; i++){
+        printf(" %d ", i);
+    }
+    printf("\n");
+    printf("height: ");
+    for( int i = 0; i < size ; i++){
+        printf("[%d]", ds->height[i]);
+    }
+    printf("\n");
 }
 
 
@@ -242,7 +255,7 @@ void print_disjS( struct rankUnionFind *ds, int size){
 
 void printArrayE( struct edge **array, int size ){
     for( int i = 0; i < size; i++){
-        printf("(%d, %d)  |",i ,i );
+        printf("(%d, %d)  |",array[i]->vrtx_x , array[i]->vrtx_y );
     }
     printf("\n");
     for( int i = 0; i < size; i++){
@@ -260,16 +273,24 @@ int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
             arrayE[numOfEls++] = new_edge( i,j, manhDist( points[i], points[j] ) );
         }
     }
-    
     QuickSort( arrayE, arraySize );
-    printArrayE( arrayE, arraySize );
-
-    //We make space for a disjointset of size n-1 ( number of vertices - 1)
-    struct rankUnionFind *uf = makeset( pointsSize-1 );
+    //We make space for a disjointset of size n ( number of vertices)
+    struct rankUnionFind *uf = makeset( pointsSize );
     
+    bool connected;
+    // Max number of edges is n-1, where n is the number of vertices 
+    int max_num_e = 0;
+    //Final weight
+    int final_w = 0;
+    for( int i = 0; max_num_e < pointsSize-1; i++   ){
+            connected = q_unionbyRank( uf, arrayE[i]->vrtx_x, arrayE[i]->vrtx_y );
+            if( connected ){
+                final_w += arrayE[i]->weight;
+                max_num_e++;
+            }
+    }
 
-
-    return 0;
+    return final_w;
 }
 
 int manhDist( int *a, int *b ){
@@ -281,6 +302,7 @@ struct edge *new_edge( int x, int y, int key ){
     new->vrtx_x = x;
     new->vrtx_y = y;
     new->weight = key;
+    return new;
 }
 
 
@@ -307,7 +329,7 @@ int main(int argc, char *argv[]){
     int colSize = 2;
     int tmp = minCostConnectPoints( ptr_points, sizeArr, &colSize );
 
-
+    printf("Result: %d", tmp);
     /*
     int arr[] = { 24, 8, 31, 16, 17, 40, 29, 23, 27};
     int size = sizeof(arr)/sizeof(arr[0]);
