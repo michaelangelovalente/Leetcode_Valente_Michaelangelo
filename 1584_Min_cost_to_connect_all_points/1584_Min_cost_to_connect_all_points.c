@@ -105,17 +105,15 @@ int partition( struct edge **array, int i, int j );
 // ------- Union-Find (by rank) DS prototypes ------ //
 struct rankUnionFind;
 struct rankUnionFind *makeset(int size);
-
 int find( int a, struct rankUnionFind *data);
 bool q_unionbyRank( struct rankUnionFind *ds, int a, int b);
-
-
-int manhDist( int *a, int *b );
 
 void print_disjS( struct rankUnionFind *ds, int size);
 
 // -------------------- The leetcode solution Prototypes ---------------------- //
 int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize);
+
+int manhDist( int *a, int *b );
 struct edge *new_edge( int x, int y, int key );
 
 /***** Quick-Sort */
@@ -159,9 +157,6 @@ int partition( struct edge **array, int i, int j ){
     return right;
 }
 
-
-
-// ---- auxiliary function ---- //
 void swap(struct edge **e1, struct edge **e2 ){
     struct edge *tmp = *e1;
     *e1 = *e2;
@@ -290,6 +285,15 @@ int minCostConnectPoints(int** points, int pointsSize, int* pointsColSize){
             }
     }
 
+    //freeing unused memory
+    for( int i =0 ; i < arraySize; i++ ){
+        free(arrayE[i] );
+    }
+    free(arrayE);
+
+    free(uf->root);
+    free(uf->height);
+    free(uf);
     return final_w;
 }
 
