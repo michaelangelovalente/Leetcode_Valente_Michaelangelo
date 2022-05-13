@@ -8,7 +8,7 @@
 - [ ] 1059. All paths from source lead to destination
 - [ ] 1168. Optimize water distribution in a village
 - [ ] 1202. smallest string with swaps
-- [ ] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) **&#129144;**
+
 ----
 ### Done
 - [x] 110. Balanced Binary Tree ( DS used: AVL )
@@ -17,6 +17,7 @@
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
 - [x] 1101.The Earliest Moment When Everyone Become Friends ( DS used: Union-F ) 
+- [x] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) **&#129144;**
 - [x] 1971.Find if path exists ( DS used: Union-F ) 
 - [x] 3933.Contains duplicate ( ) 
 

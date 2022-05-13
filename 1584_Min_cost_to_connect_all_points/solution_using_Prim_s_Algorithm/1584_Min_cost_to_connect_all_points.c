@@ -1,17 +1,14 @@
 #include <stdio.h>
 #include <stdlib.h>
-/*** min-Heap Implementation*/
-
+/*** PriorityQueue Implementation ( /w minHeap)*/
 // priorityqueue function protos
-
 // pop() extracts min element
-
+int *pop(int **heap);
 // insert() adds an element to the array
 void insert(int **heap, int weight, int vrtx);
-
+// destroyheap() frees the memory used by the heap and destroys the heap;
 // -------
 // Auxiliary funcitons proto.
-
 void swap(int **a, int **b);
 int father(int i);
 int leftchild(int i);
@@ -22,6 +19,7 @@ void heapifydown(int **heap, int parent);
 
 // ---
 int manDist(int *p1, int *p2);
+int minCostConnectPoints(int **points, int pointsSize, int *pointsColSize);
 
 // priorityqueue functions
 // Creates an empty min-heap of size '*size'
@@ -58,6 +56,16 @@ void insert(int **heap, int weight, int vrtx)
     heap[*size] = new;
     heapifyup(heap, *size);
     return;
+}
+
+void destroyheap( int **heap){
+    int size = heap[0][0];
+    for( int i = 0; i < size; i ++){
+        if( heap[i] != NULL ){
+            free( heap[i]);
+        }
+    }
+    free(heap);
 }
 
 // Aux. Functions
@@ -178,7 +186,7 @@ int minCostConnectPoints(int **points, int pointsSize, int *pointsColSize)
         // and add them to the pq
         for (int i = 0; i < pointsSize; i++)
         {
-            if (i != val[1])
+            if (i != val[1] && !(visited[i]))
             {
                 // insert in queue distance from current vertex --> neighbouring vertex
                 int manhD = manDist(points[val[1]],  points[i]); 
@@ -187,7 +195,10 @@ int minCostConnectPoints(int **points, int pointsSize, int *pointsColSize)
         }
 
         // freeunused array
+        free( val );
     }
+    destroyheap( pq );
+
     return weight;
 }
 int manDist(int *p1, int *p2)
@@ -198,7 +209,8 @@ int manDist(int *p1, int *p2)
 int main(int argc, char *argv[])
 {
     // points = [[0,0],[2,2],[3,10],[5,2],[7,0]]
-    int p[][2] = {{0, 0}, {2, 2}, {3, 10}, {5, 2}, {7, 0}};
+    //int p[][2] = {{0, 0}, {2, 2}, {3, 10}, {5, 2}, {7, 0}};
+    int p [][2] = {{11,-6},{9,-19},{16,-13},{4,-9},{20,4},{20,7},{-9,18},{10,-15},{-15,3},{6,6}};
 
     int size = sizeof(p) / sizeof(p[0]);
 
@@ -209,11 +221,9 @@ int main(int argc, char *argv[])
         new_arr[i][0] = p[i][0];
         new_arr[i][1] = p[i][1];
     }
-    int colsize = 2;
-    int weight = minCostConnectPoints(new_arr, size, &colsize);
-    printf("Weight is: %d\n", weight);
+    
 
-    /*
+    
     for( int i = 0; i < size; i++ ){
         int md = 0;
         printf("Edges close to edge: %d-->", i);
@@ -226,57 +236,10 @@ int main(int argc, char *argv[])
         }
         printf("\n\n");
     }
-    */
+    
+    int colsize = 2;
+    int weight = minCostConnectPoints(new_arr, size, &colsize);
+    printf("Weight is: %d\n", weight);
 
-    /*
-    int **arr = calloc(3 , sizeof( int * ));
-     arr[0] = calloc( 2, sizeof(int) );
-    arr[0][0] = 1; arr[0][1] = 2;
 
-    arr[1] = calloc( 2, sizeof(int) );
-    arr[1][0] = 11; arr[1][1] = 22;
-
-    arr[2] = calloc( 2, sizeof(int) );
-    arr[2][0] = 111; arr[2][1] = 222;
-
-    for( int i = 0; i < 3; i ++) {
-        printf("[%d] - [%d]\n", arr[i][0], arr[i][1]);
-    }
-
-    swap( &(arr[0]), &(arr[2]) );
-
-    printf("\n");
-    for( int i = 0; i < 3; i ++) {
-        printf("[%d] - [%d]\n", arr[i][0], arr[i][1]);
-    }
-    printf("\n");
-    arr = realloc( arr, 5 * sizeof(int*) );
-    arr[3] = calloc( 2, sizeof(int) );
-    arr[3][0] = 111; arr[3][1] = 222;
-
-    arr[4] = calloc( 2, sizeof(int) );
-    arr[4][0] = 111; arr[4][1] = 222;
-
-    for( int i = 0; i < 5; i ++) {
-        printf("[%d] - [%d]\n", arr[i][0], arr[i][1]);
-    }
-    */
-    /*
-     int arr[] = {7,2,9,4,5,3};
-     int size_arr = sizeof( arr )/ sizeof( arr[0] );
-     int sizeofheap = 6;
-     int **heap = makeheap( &sizeofheap );
-     for( int i = 0; i < size_arr; i++  ){
-         insert( heap, arr[i], arr[i]);
-         printheap(heap);
-         printf("\n");
-     }
-    int *tmp = pop(heap);
-    printf("\nPopped: %d,%d\n", tmp[0], tmp[1] );
-    printheap(heap);
-
-    tmp = pop(heap);
-    printf("\nPopped: %d,%d\n", tmp[0], tmp[1] );
-    printheap(heap);
-    */
 }
