@@ -3,6 +3,7 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
+- [ ] 743. Network Delay Time **&#129144;**
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
@@ -17,7 +18,7 @@
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
 - [x] 1101.The Earliest Moment When Everyone Become Friends ( DS used: Union-F ) 
-- [x] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) **&#129144;**
+- [x] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) 
 - [x] 1971.Find if path exists ( DS used: Union-F ) 
 - [x] 3933.Contains duplicate ( ) 
 
