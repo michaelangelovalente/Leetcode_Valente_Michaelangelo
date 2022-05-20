@@ -50,7 +50,7 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
         }
     }
     
-    for( int i =0; i <=k; i++ ){
+    for( int i =0; i <= k; i++ ){
         printf("--------------\n");
         printf("curr: ");
         printarr( *curr, n );
@@ -61,16 +61,25 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
             // vrtx0->vrtx1
             int currDist = (*prev)[ flights[j][1] ]; // current weight( vrtx1 )
             int nextDist = abs( (*prev)[ flights[j][0] ] + flights[j][2] ) ; // curr weight( vrtx0 ) + new_weight_to( vrtx 1)
-            if( nextDist <= currDist ){ // Issue: DO I NEED TO UPDATE THE VALUES IN ONE OF THE ARRAYS to copy prev?
-                (*curr)[ flights[j][1] ] = nextDist;
+            if( nextDist < currDist ){ 
+                if( (*curr)[ flights[j][1] ] > nextDist ){
+                    (*curr)[ flights[j][1] ] = nextDist;
+                }
+                
             }
         }
+
         printf("curr: ");
         printarr( *curr, n );
         printf("prev: ");
         printarr( *prev, n );
         printf("\n");
-        swap( curr, prev );
+
+        for( int j = 0; j < n; j++ ){
+            (*prev)[j] = (*curr)[j];
+        }
+        
+        //swap( curr, prev );
         printf("\n");
         printf("curr: ");
         printarr( *curr, n );
@@ -82,13 +91,8 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
 
     if( (*prev)[dst] >= INF ) return -1;
 
-    int max = (*prev)[0];
-    for( int i = 1 ; i < n; i++){
-        if( max < (*prev)[i] ){
-            max = (*prev)[i];
-        }
-    }
-    return max;
+    
+    return (*prev)[dst];
 }
 
 
@@ -110,18 +114,32 @@ void printarr( int *a, int size){
 
 
 int main( int argc, char *argv[] ){
-    int  n = 4; // number of airports
-    int tmp[][3] = {{0,1,100},{1,2,100},{2,0,100},{1,3,600},{2,3,200}}; 
+
+    /**
+     * @brief 
+     *
+     * 
+     * 
+        7
+        {{0,3,7},{4,5,3},{6,4,8},{2,0,10},{6,5,6},{1,2,2},{2,5,9},{2,6,8},{3,6,3},{4,0,10},{4,6,8},{5,2,6},{1,4,3},{4,1,6},{0,5,10},{3,1,5},{4,3,1},{5,4,10},{0,1,6}}
+        2
+        4
+        1
+     * 
+     * 
+     */
+    int  n = 7; // number of airports
+    int tmp[][3] = {{0,3,7},{4,5,3},{6,4,8},{2,0,10},{6,5,6},{1,2,2},{2,5,9},{2,6,8},{3,6,3},{4,0,10},{4,6,8},{5,2,6},{1,4,3},{4,1,6},{0,5,10},{3,1,5},{4,3,1},{5,4,10},{0,1,6}};
     int flightsSize = sizeof( tmp ) / sizeof( tmp[0] );
-    int **flights = calloc( n, sizeof( int *) );
+    int **flights = calloc( flightsSize, sizeof( int *) );
     for( int i = 0; i < flightsSize; i++){
         flights[i] = calloc(3 , sizeof(int));
         flights[i][0] = tmp[i][0];
         flights[i][1] = tmp[i][1];
         flights[i][2] = tmp[i][2];
     }
-    int src = 0; // source
-    int dst = 3; // dst
+    int src = 2; // source
+    int dst = 4; // dst
     int k = 1; // at most k airports --> k+1 iteration of Bellman Ford
     
 
