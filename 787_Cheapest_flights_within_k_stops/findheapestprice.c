@@ -51,6 +51,7 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
     }
     
     for( int i =0; i <=k; i++ ){
+        printf("--------------\n");
         printf("curr: ");
         printarr( *curr, n );
         printf("prev: ");
@@ -60,7 +61,7 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
             // vrtx0->vrtx1
             int currDist = (*prev)[ flights[j][1] ]; // current weight( vrtx1 )
             int nextDist = abs( (*prev)[ flights[j][0] ] + flights[j][2] ) ; // curr weight( vrtx0 ) + new_weight_to( vrtx 1)
-            if( nextDist < currDist ){ // Issue: DO I NEED TO UPDATE THE VALUES IN ONE OF THE ARRAYS to copy prev?
+            if( nextDist <= currDist ){ // Issue: DO I NEED TO UPDATE THE VALUES IN ONE OF THE ARRAYS to copy prev?
                 (*curr)[ flights[j][1] ] = nextDist;
             }
         }
@@ -71,14 +72,20 @@ int findCheapestPrice(int n, int** flights, int flightsSize, int* flightsColSize
         printf("\n");
         swap( curr, prev );
         printf("\n");
+        printf("curr: ");
+        printarr( *curr, n );
+        printf("prev: ");
+        printarr( *prev, n );
+        printf("\n");
 
     }
 
-    int max = (*curr)[0];
+    if( (*prev)[dst] >= INF ) return -1;
+
+    int max = (*prev)[0];
     for( int i = 1 ; i < n; i++){
-        if( (*curr)[i] >= INF || max >= INF ) return -1;
-        if( max < (*curr)[i] ){
-            max = (*curr)[i];
+        if( max < (*prev)[i] ){
+            max = (*prev)[i];
         }
     }
     return max;
@@ -133,5 +140,5 @@ int main( int argc, char *argv[] ){
     printarr( tester2, 4);
     */
     int test =  findCheapestPrice(n, flights, flightsSize, &flightsColSize, src, dst, k);
-
+    printf("Min cost:%d", test);
 }
