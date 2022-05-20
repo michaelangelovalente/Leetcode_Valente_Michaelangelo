@@ -1,9 +1,9 @@
 # LEETCODE Practice
-## Data Structures and Algorithms in C, OOP practice in Java and SQL
+## Data Structures and Algorithms in C, OOP design practice in Java, and SQL practice
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
-- [ ] 743. Network Delay Time **&#129144;**
+- [ ] 787. Cheapest flights within K stops( Algo used to solve the problem: Bellman Ford. [ Basic versione that uses 2 support arrays. ] ) &#129144;
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
@@ -17,6 +17,7 @@
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
+- [x] 743. Network Delay Time ( Algo used to solve the problem: There are two versions, Dijkstra that uses a Priorityqueue )
 - [x] 1101.The Earliest Moment When Everyone Become Friends ( DS used: Union-F ) 
 - [x] 1584. Min Cost to Connect All Points (Algo Used to solve the problem: Kruskal's Algorithm) 
 - [x] 1971.Find if path exists ( DS used: Union-F ) 
