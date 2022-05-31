@@ -166,7 +166,7 @@ int rightVal( int **heights, int i , int j ){
     return abs(heights[i][j] - heights[i][j+1]);
 }
 
-// bottom vrt adjList + 3;
+// bottom vrt adjList + colSize;
 int bottomVal( int **heights, int i, int j ){
     return abs( heights[i][j] - heights[i+1][j] );
 }
@@ -239,13 +239,13 @@ int minimumEffortPath(int** heights, int heightsSize, int* heightsColSize){
             // generate right and bottom
             if( i <  (*heightsColSize)-1 && j < heightsSize-1 ){
                 new = newEdge( adjListIdx+1, rightVal( heights, i, j ) );
-                new->next = newEdge( adjListIdx+3, bottomVal( heights, i ,j ) );
+                new->next = newEdge( adjListIdx+(*heightsColSize), bottomVal( heights, i ,j ) );
                 adjList->list[ adjListIdx++ ] = new;
             }else if( j!= i && i == (*heightsColSize)-1 ){//( == bottom boundary ) --> generate only right
                 new = newEdge( adjListIdx+1, rightVal( heights, i, j ) );
                 adjList->list[ adjListIdx++ ] = new;
             }else if( j!=i && j == heightsSize -1 ){ //else if( == right boundary ) --> generate only bott
-                new = newEdge( adjListIdx+3, bottomVal( heights, i, j ) );
+                new = newEdge( adjListIdx+(*heightsColSize), bottomVal( heights, i, j ) );
                 adjList->list[ adjListIdx++ ] = new;
             }else{// last vertex is empty
                 adjList->list[ adjListIdx++ ] = NULL;
@@ -262,7 +262,7 @@ int minimumEffortPath(int** heights, int heightsSize, int* heightsColSize){
     
 
 
-    return -1;
+    return dijk[0][adjListIdx-1];
 }
 
 int main( int argc, char *argv[]){

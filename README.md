@@ -3,11 +3,12 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
+- [ ] 198. House Robber ( Dynamic Programming approach used: Bottom-up and Top-down) &#129144;
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
 - [ ] 1168. Optimize water distribution in a village
-- [ ] 1631. Path with minimum effort ( Algo used: modified version of Dijkstra. DS used: Priority queue implemented with a Min-heap )  &#129144;
+- [ ] 1631. Path with minimum effort ( Algo used: modified version of Dijkstra. DS used: Priority queue implemented with a Min-heap )  
 - [ ] 1202. smallest string with swaps
 
 ----
