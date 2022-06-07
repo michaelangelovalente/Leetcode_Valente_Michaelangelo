@@ -13,28 +13,27 @@ int max( int a, int b){
 
 int deleteAndEarn(int* nums, int numsSize){
     int *points = calloc( nums[0]+1, sizeof( int )  );//arbitrary size for points table. We update this with the maxValue available inside nums
-    int pointsSize = numsSize, maxVal = nums[0];
-    int oldSize = pointsSize;
+    int maxVal = nums[0];
+    int  oldSize, pointsSize = oldSize = maxVal+1;
     int *memo;
 
 
     for( int i = 0; i < numsSize; i++){ //We iterate over nums to fill the points table. points table will contain how much points each number will have 
-        if( nums[i] > pointsSize ){
+        if( nums[i] > maxVal ){
+            maxVal = nums[i];
             oldSize = pointsSize;
-            pointsSize = nums[i]+1;
+            pointsSize = maxVal + 1;
             points = realloc( points, pointsSize * sizeof( int ) );
-            for( int j = oldSize; j<pointsSize; j++) points[j] = 0;
+            for( int j = oldSize; j< pointsSize; j++ ) points[j] = 0;
             //print_array( points, maxVal+1);
         }
-        if( nums[i] > maxVal){
-            maxVal = nums[i];
-        }
+        
         points[ nums[i] ] += nums[i];
         //print_array( points, maxVal+1);
     }
     
     //print_array( points, maxVal+1);
-    memo = calloc( maxVal+1, sizeof(int));
+    memo = calloc( pointsSize, sizeof(int));
     memo[0] = 0, memo[1] = points[1];
 
     for( int i = 2; i <= maxVal; i++ ){
@@ -43,6 +42,8 @@ int deleteAndEarn(int* nums, int numsSize){
 
     print_array( memo, maxVal+1);
     int finalRes = memo[maxVal];
+    free(memo);
+    free(points);
     
     return finalRes;
 }

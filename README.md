@@ -3,7 +3,7 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
-- [ ] 740. Delete and Earn (Dynamic Programming paradigm. Bottom-up approach ) &#129144;
+- [ ] 705. Design Hashset( DS used: AVL) &#129144;
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders
 - [ ] 1059. All paths from source lead to destination
@@ -19,6 +19,7 @@
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
+- [x] 740. Delete and Earn (Dynamic Programming paradigm. Bottom-up approach ) 
 - [x] 743. Network Delay Time ( Algo used to solve the problem: There are two versions, Dijkstra that uses a Priorityqueue )
 - [x] 746. Min cost climbing stairs( Dynamic programming paradigm used: 2 solutions, bottom-up and top-down)
 - [x] 787. Cheapest flights within K stops( Algo used to solve the problem: Bellman Ford. [ Basic versione that uses 2 support arrays. ] )
