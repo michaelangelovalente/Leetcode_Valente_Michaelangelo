@@ -101,32 +101,41 @@ char * smallestStringWithSwaps(char * s, int** pairs, int pairsSize, int* pairsC
         }
     }
     //
-
+    printf("\n");
     
-    for( int i = 0; i < size_s; i++ ){
+    char *result = calloc(size_s+1, sizeof( char ));
+    result[size_s]='\0';
+    char *tmp_str = calloc( size_s+1, sizeof( char ));
+    for( int i = 0, k = 0; i < size_s; i++ ){
         if( dict[i] ){
-            char *tmp_str = calloc( size_s+1, sizeof( char ));
+            k=0;
             //generate a substring containing only the characters of each set.
             int j;
             for( j = 0; j < size_s; j++){ 
                 if( dict[i][j] == 1){
                     //take the char at position j from the original string and place it in the sub-string
-                    tmp_str[j] = s[j];
+                    tmp_str[k++] = s[j];
                 }
             }
-            tmp_str[j+1] = '\0';
-            //test
-            printf("string: %s\n", tmp_str);
+            tmp_str[k] = '\0';
             //sort the substring
             q_sort(tmp_str, 0, strlen(tmp_str));
-            printf("string: %s\n", tmp_str);
-
+            //extract from the sorted string to final_result string.
+            k=0;
+            for( j = 0; j < size_s; j++ ) {
+                if( dict[i][j] == 1 ){
+                    result[j] = tmp_str[k++];
+                }
+                
+            }
+            // we don't need to add '\0' add the end since we've already done it above.
         }else{//test
             printf("Empty\n");
         }
+        
     }
 
-    return 0;
+    return result;
 }
 
 void swap_str( char *s1, char *s2){
@@ -176,7 +185,7 @@ int main(){
     }
 
     char *str  = smallestStringWithSwaps( s, arr, size_a, &colsize);
-    
+    printf("\nFINAL RESULT: %s\n", str);
    /*
     printf("str: %s\n", s);
     printf("position: %d\n", partition( s, 0, strlen(s)));
