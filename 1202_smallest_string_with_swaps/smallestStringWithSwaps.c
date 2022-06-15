@@ -25,7 +25,7 @@ void print_array( int *arr, int size ){
     return;
 }
 struct set *make_set( int size ){
-    struct set *uf = calloc( 1, sizeof( struct set *));
+    struct set *uf = calloc( 1, sizeof( struct set ));
     uf->rank = calloc( size, sizeof( int ));
     uf->p = calloc( size, sizeof( int ));
     uf->setSize = size;
@@ -91,18 +91,6 @@ char * smallestStringWithSwaps(char * s, int** pairs, int pairsSize, int* pairsC
         }
     }
 
-    //test print
-    printf("\n");
-    for( int i = 0; i < swappable->setSize; i++ ){
-        if( dict[i] != NULL ){
-            print_array( dict[i], swappable->setSize );
-        }else{
-            printf("Empty\n");
-        }
-    }
-    //
-    printf("\n");
-    
     char *result = calloc(size_s+1, sizeof( char ));
     result[size_s]='\0';
     char *tmp_str = calloc( size_s+1, sizeof( char ));
@@ -129,8 +117,6 @@ char * smallestStringWithSwaps(char * s, int** pairs, int pairsSize, int* pairsC
                 
             }
             // we don't need to add '\0' add the end since we've already done it above.
-        }else{//test
-            printf("Empty\n");
         }
         
     }
@@ -166,10 +152,16 @@ void q_sort( char *str, int i, int f){
     }
     return;
 }
-int main(){
+int main(int argc, char *argv[]){
     
-    char s[] = "dcabzf";
+    /*char s[] = "dcabzf";
     int a[][2] = { {0, 3}, {1, 2}, {0,2}, {4,5}};
+    */
+    char s[] = "dcab";
+    int a[][2] = { {0,3}, {1,2 }};
+
+    
+
     int size_a = sizeof( a )/ sizeof( a[0] );
     int **arr = calloc( size_a, sizeof( int *) );
     int colsize = 2;
