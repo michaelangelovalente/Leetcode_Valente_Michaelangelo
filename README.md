@@ -3,7 +3,7 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
-- [ ] 704. Binary Search (Divide-et-impera)
+
 - [ ] 705. Design Hashset( DS used: AVL) 
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders &#129144;
@@ -19,6 +19,7 @@
 - [x] 198. House Robber ( Dynamic Programming approach used: Bottom-up and Top-down)
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
+- [x] 704. Binary Search (Divide-et-impera)
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
 - [x] 740. Delete and Earn (Dynamic Programming paradigm. Bottom-up approach ) 
 - [x] 743. Network Delay Time ( Algo used to solve the problem: There are two versions, Dijkstra that uses a Priorityqueue )
