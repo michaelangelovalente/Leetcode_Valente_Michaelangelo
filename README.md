@@ -3,6 +3,7 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
+- [ ] 704. Binary Search (Divide-et-impera)
 - [ ] 705. Design Hashset( DS used: AVL) 
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders &#129144;
