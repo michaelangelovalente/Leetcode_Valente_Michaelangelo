@@ -6,11 +6,12 @@
 - [ ] 35. Search Insert Position ( Binary search )
 - [ ] 705. Design Hashset( DS used: AVL) 
 - [ ] 797. All paths from source to target ( )
-- [ ] 909. Snakes and ladders &#129144;
+- [ ] 909. Snakes and ladders 
+- [ ] 977. Squares of Sorted arrays ( Quick-sort )
 - [ ] 1059. All paths from source lead to destination
 - [ ] 1168. Optimize water distribution in a village
 - [ ] 1631. Path with minimum effort ( Algo used: modified version of Dijkstra. DS used: Priority queue implemented with a Min-heap )  
-- [ ] 1202. smallest string with swaps &#129144;
+- [ ] 1202. smallest string with swaps 
 
 ----
 ### Done
