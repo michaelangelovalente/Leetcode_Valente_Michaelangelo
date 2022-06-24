@@ -16,9 +16,10 @@
 ### Done
 - [x] 110. Balanced Binary Tree ( DS used: AVL )
 - [x] 136. Single Number ( used XOR boolean l. ) 
-- [x] 189. ROtate Array ()
+- [x] 189. Rotate Array ()
 - [x] 198. House Robber ( Dynamic Programming approach used: Bottom-up and Top-down)
 - [x] 202. Happy number ( DS used: BST, HashSet /w nodes ) 
+- [ ] 283. Move Zeroes ()
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) 
 - [x] 704. Binary Search (Divide-et-impera)
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) 
