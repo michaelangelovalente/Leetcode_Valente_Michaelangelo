@@ -3,6 +3,7 @@
 
 ### In progress
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
+- [ ] 19. Remove Nth node from end of list ()
 - [ ] 35. Search Insert Position ( Binary search )
 - [ ] 705. Design Hashset( DS used: AVL) 
 - [ ] 797. All paths from source to target ( )
@@ -14,8 +15,10 @@
 
 ----
 ### Done
+- [x] 34. Find first and last element of sorted array ( Two pointer technique )
 - [x] 110. Balanced Binary Tree ( DS used: AVL )
 - [x] 136. Single Number ( used XOR boolean l. ) 
+- [x] 141. Linked List cycle ( Two pointer technique )
 - [x] 167. Two sums ii ()
 - [x] 189. Rotate Array ()
 - [x] 198. House Robber ( Dynamic Programming approach used: Bottom-up and Top-down)
