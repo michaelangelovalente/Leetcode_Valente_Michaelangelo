@@ -16,7 +16,9 @@ void print_arr( int *arr, int size){
     for( int i = 0; i < size; i++) printf("[%02d]", arr[i]);
     printf("\n");
 }
+/*
 
+m*logn solution:
 int binSearch( int *arr, int size, int target ){
     int begin=0, end = size-1;
     while( begin <= end ){
@@ -39,9 +41,31 @@ bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
     }
     return false;
 }
+*/
+
+int binaryMatrixSearch( int **matrix, int n_rows, int n_cols, int target  ){
+    int begin = 0, end = (n_rows*n_cols)-1;
+    while( begin <= end ){
+        int mid = (begin+end)/2;
+        if( matrix[mid/n_cols][mid%n_cols] == target){
+            return mid;
+        }
+
+        if( matrix[mid/n_cols][mid%n_cols] < target ){
+            begin = mid +1;
+        }else{
+            end = mid-1;
+        }
+    }
+    return -1;
+}
+
+bool searchMatrix(int** matrix, int matrixSize, int* matrixColSize, int target){
+    return binaryMatrixSearch( matrix, matrixSize, *matrixColSize, target) != -1;
+}
 
 int main(){
-    int tmp[][4] = {{1,3,5,7},{10,11,16,20},{23,30,34,60}}, target = 3;
+    int tmp[][4] = {{1,3,5,7},{10,11,16,20},{23,30,34,60}}, target = 35;
     int size_r = sizeof(tmp)/sizeof(tmp[0]);
     int size_c = sizeof(tmp[0])/sizeof(tmp[0][0]);
     int **matrix = calloc( size_r, sizeof(int *) );
@@ -55,7 +79,7 @@ int main(){
 
     print_matrix( matrix, size_r, size_c );
     printf("---------------\n");
-    bool found = searchMatrix( matrix, size_r, &size_c, 3);
-    printf("Found:%d\n");
+    
+    printf("Search matrix: %d\n", binaryMatrixSearch( matrix, size_r, size_c, target ));
 
 }
