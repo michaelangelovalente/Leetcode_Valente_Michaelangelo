@@ -17,6 +17,7 @@
 ### Done
 - [x] 34. Find first and last element of sorted array ( Two pointer technique )
 - [x] 74. Search a 2D Matrix ()
+- [x] 82. Remove duplicates from sorted list ii ()
 - [x] 110. Balanced Binary Tree ( DS used: AVL )
 - [x] 136. Single Number ( used XOR boolean l. ) 
 - [x] 141. Linked List cycle ( Two pointer technique )
