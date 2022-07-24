@@ -29,6 +29,7 @@
 - [x] 283. Move Zeroes () - Language: C
 - [x] 344. Reverse String() - Language: C
 - [x] 349. Intersection of two arrays ( DS used: BST, HashSet /w nodes ) - Language: C
+- [x] 387. First Unique Character in a String (DS used: HashMap ) - Language Java
 - [x] 704. Binary Search (Divide-et-impera) - Language: C
 - [x] 706. Design Hash Map ( DS used: linked list *to handle collisions* ) - Language: C
 - [x] 724. Find Pivot Index () Language: Java
