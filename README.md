@@ -5,6 +5,7 @@
 - [ ] 1. Two sums ( DS used: AVL, HashMap ) 
 - [ ] 19. Remove Nth node from end of list ()
 - [ ] 35. Search Insert Position ( Binary search )
+- [ ] 392. Is Subsequence()
 - [ ] 705. Design Hashset( DS used: AVL) 
 - [ ] 797. All paths from source to target ( )
 - [ ] 909. Snakes and ladders 

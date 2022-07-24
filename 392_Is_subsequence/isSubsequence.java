@@ -29,9 +29,8 @@ class Solution {
             if( s.charAt(leftIdx) == t.charAt(rightIdx) ){
                 leftIdx++;
                 rightIdx++;
-            }else{
-                rightIdx++;
             }
+            rightIdx++;
         }
     return leftIdx == leftBound;       
     }
